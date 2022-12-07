@@ -1,15 +1,17 @@
 <template>
-  <div>
-    <systemTitle />
+  <div id="app">
+    <systemTitleVue />
   </div>
 </template>
 
 <script>
-import systemTitle from './components/systemTitle.vue'
+import systemTitleVue from './components/systemTitle.vue';
 export default {
   name: 'App',
   components: {
-    systemTitle
+    systemTitleVue
+  },
+  methods: {
   }
 }
 </script>
@@ -21,6 +23,6 @@ div {
   margin: 0;
   padding: 0;
 }
-#app {
-}
+
+#app {}
 </style>

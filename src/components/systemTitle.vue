@@ -1,36 +1,42 @@
 <template>
-  <div id="title" style="display:flex">
-    <div @click="min">最小化</div>
-    <div @click="max">最大化</div>
-    <div @click="close">关闭</div>
+  <div id="appChild" style="display: flex;">
+    <div class="btn" @click="min">最小</div>
+    <div class="btn" @click="def">中间</div>
+    <div class="btn" @click="max">最大</div>
+    <div class="btn" @click="close">关闭</div>
   </div>
 </template>
 
 <script>
-import { remote } from 'electron';
+import { ipcRenderer } from 'electron'
 export default {
   name: "systemTitle",
-  methods:{
-    min(){
-      console.log(remote);
-      remote.getCurrentWindow().minimize();
+  methods: {
+    min() {
+      ipcRenderer.send('min-app')
     },
-    max(){
-
+    max() {
+      ipcRenderer.send('max-app')
     },
-    close(){
-
+    def(){
+      ipcRenderer.send('show')
+    },
+    close() {
+      ipcRenderer.send('close-app')
     }
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-#title {
-  width: 100vw;
-  height: 52px;
+<style>
+#appChild {
   background-color: rgb(198, 47, 47);
   -webkit-app-region: drag;
+  width: 100%;
+  padding: 14px;
+}
+.btn{
+  -webkit-app-region: no-drag;
 }
 </style>
