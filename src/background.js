@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Notification, Menu, ipcMain } from 'electron'
+import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, remote } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 
@@ -20,36 +20,34 @@ async function createWindow() {
     frame: false,
     width: 900,
     height: 700,
+    resizable: false,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      nodeIntegration: true,
       devTools: true,//隐藏调试工具
     }
-  })
-
-  ipcMain.on('close-app', () => {
-    console.log(win);
-    win.hide();
-    setTimeout(() => {
-      win.show();
-    }, 3000);
-  })
-  ipcMain.on('show', () => {
-    win.restore()
-  })
-  ipcMain.on('min-app', () => {
-    win.minimize()
-  })
-  ipcMain.on('max-app', () => {
-    win.maximize()
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    ipcMain.on('show', () => {
+      win.restore()
+    })
+    ipcMain.on('min-app', () => {
+      win.minimize()
+    })
+    ipcMain.on('max-app', () => {
+      win.maximize()
+    })
+    ipcMain.on('window-close', function(res){
+      app.exit()
+      console.log(app);
+    })
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')

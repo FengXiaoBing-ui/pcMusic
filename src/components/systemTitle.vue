@@ -22,7 +22,7 @@ export default {
       ipcRenderer.send('show')
     },
     close() {
-      ipcRenderer.send('close-app')
+      ipcRenderer.send('window-close')
     }
   }
 };
