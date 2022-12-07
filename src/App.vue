@@ -5,24 +5,27 @@
 </template>
 
 <script>
-import systemTitleVue from './components/systemTitle.vue';
+import "/src/index.scss";
+import systemTitleVue from "./components/systemTitle.vue";
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    systemTitleVue
+    systemTitleVue,
   },
-  methods: {
-  }
-}
+  methods: {},
+};
 </script>
 
 <style>
+@import "~/src/index.scss";
 html,
 body,
 div {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
-#app {}
+#app {
+}
 </style>

@@ -20,7 +20,6 @@ async function createWindow() {
     frame: false,
     width: 900,
     height: 700,
-    resizable: false,
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -46,7 +45,6 @@ async function createWindow() {
     })
     ipcMain.on('window-close', function(res){
       app.exit()
-      console.log(app);
     })
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
