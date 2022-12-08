@@ -1,9 +1,10 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, remote } from 'electron'
+import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, Tray } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
-
+const path = require('path')
+let tray = null
 const isDevelopment = process.env.NODE_ENV !== 'production'
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -20,6 +21,7 @@ async function createWindow() {
     frame: false,
     width: 900,
     height: 700,
+    icon: "http://124.220.219.72:8084/static/video/icon.ico",
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
@@ -43,8 +45,34 @@ async function createWindow() {
     ipcMain.on('max-app', () => {
       win.maximize()
     })
-    ipcMain.on('window-close', function(res){
-      app.exit()
+    ipcMain.on('window-close', function (e) {
+      win.hide();    // 隐藏主程序窗口
+      // app.exit()
+    })
+    // 新建托盘
+    tray = new Tray(path.join(__dirname, 'favicon.ico'));
+
+    // 自定义托盘图标的内容菜单
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        // 点击退出菜单退出程序
+        label: '退出', click: function () {
+          win.destroy()
+          app.quit()
+        }
+      },
+      {
+        label: '别点了，没用', click: function (e) {
+          console.log(e);
+        }
+      }
+    ])
+
+    tray.setToolTip('pcMusic')  // 设置鼠标指针在托盘图标上悬停时显示的文本
+    tray.setContextMenu(contextMenu)  // 设置图标的内容菜单
+    // 点击托盘图标，显示主窗口
+    tray.on("click", () => {
+      win.show();
     })
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {

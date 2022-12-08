@@ -5,18 +5,18 @@
     <div class="rightBox flex align-center">
       <view class="btn"
         ><i style="font-size: 26px" class="icon iconfont icon-user"></i
-      ></view>
+      ></view><!-- 用户头像 -->
       <view class="btn flex align-end">
         <p class="text-sm">未登录</p>
         <i
           style="font-size: 10px; margin-left: 4px"
           class="icon iconfont icon-arrow-down-filling"
         ></i>
-      </view>
-      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view>
-      <view class="btn"><i class="icon iconfont icon-down1"></i></view>
-      <view class="btn"><i class="icon iconfont icon-skin"></i></view>
-      <view class="btn"><i class="icon iconfont icon-menu"></i></view>
+      </view><!-- 登录 -->
+      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view><!-- vip -->
+      <view class="btn"><i class="icon iconfont icon-down1"></i></view><!-- 下拉框 -->
+      <view class="btn"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
+      <view @click="mainMenu" class="btn"> <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" /> <i class="icon iconfont icon-menu"></i></view><!-- 主菜单 -->
       <view class="border"></view>
       <div class="btn">
         <i style="font-size: 20px" class="icon iconfont icon-minimize"></i>
@@ -39,14 +39,22 @@
 
 <script>
 import { ipcRenderer } from "electron";
+import mainMenu from "@/components/bulletFrame/mainMenu.vue";
 export default {
   name: "systemTitle",
+  components:{
+    mainMenu
+  },
   data() {
     return {
       restore: false,
+      mainMenuShow:false,
     };
   },
   methods: {
+    mainMenu(){
+      this.mainMenuShow = !this.mainMenuShow
+    },
     min() {
       ipcRenderer.send("min-app");
     },
@@ -86,6 +94,7 @@ export default {
 .btn {
   padding: 0 10px;
   -webkit-app-region: no-drag;
+  position: relative;
   cursor: pointer;
   i,p{
     transition: all 0.3s;
