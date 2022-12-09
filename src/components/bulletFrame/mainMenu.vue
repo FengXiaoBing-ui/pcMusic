@@ -1,6 +1,7 @@
 <template>
-    <div class="mainMenu" :class="mainMenuShow?'mainMenuShow':''">
-        <div style="padding: 5px 0;" class="flex align-center justify-center" v-for="item in 6" :key="item">{{ item }}</div>
+    <div class="mainMenu" :class="mainMenuShow ? 'mainMenuShow' : ''">
+        <div style="padding: 5px 0;" class="flex align-center justify-center" v-for="item in 6" :key="item">{{ item }}
+        </div>
     </div>
 </template>
   
@@ -8,9 +9,9 @@
 export default {
     name: "mainMenu",
     props: {
-        mainMenuShow:{
-            type:Boolean,
-            default:false
+        mainMenuShow: {
+            type: Boolean,
+            default: false
         }
     },
     methods: {},
@@ -26,9 +27,10 @@ export default {
     border-radius: 10px;
     background-color: rgb(198, 47, 47);
     opacity: 0;
-    transform: scale(1,0);
+    transform: scale(1, 0);
     transform-origin: top;
     transition: all 0.1s;
+
     &::before {
         content: '';
         display: block;
@@ -42,7 +44,8 @@ export default {
         border-right: 10px solid transparent;
     }
 }
-.mainMenuShow{
+
+.mainMenuShow {
     opacity: 1;
     transform: scale(1);
 }

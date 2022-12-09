@@ -1,23 +1,20 @@
 <template>
   <div id="app">
-    <systemTitleVue />
+    <router-view />
   </div>
 </template>
 
 <script>
 import "/src/index.scss";
-import systemTitleVue from "./components/systemTitle.vue";
 export default {
   name: "App",
-  components: {
-    systemTitleVue,
-  },
   methods: {},
 };
 </script>
 
 <style>
 @import "~/src/index.scss";
+
 html,
 body,
 div {
@@ -26,6 +23,5 @@ div {
   box-sizing: border-box;
 }
 
-#app {
-}
+#app {}
 </style>

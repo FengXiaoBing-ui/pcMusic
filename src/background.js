@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, Tray } from 'electron'
+import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, Tray, screen } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const path = require('path')
@@ -14,10 +14,48 @@ protocol.registerSchemesAsPrivileged([
 const menu = Menu.buildFromTemplate([])
 Menu.setApplicationMenu(menu)
 
+// 创建窗口的函数
+let win = null,win2 = null
+async function createSBallWindow () {
+  win2 = new BrowserWindow({
+    width: 360, //悬浮窗口的宽度 比实际DIV的宽度要多2px 因为有1px的边框
+    height: 160, //悬浮窗口的高度 比实际DIV的高度要多2px 因为有1px的边框
+    type: 'toolbar',  //创建的窗口类型为工具栏窗口
+    frame: false,  //要创建无边框窗口
+    resizable: false, //禁止窗口大小缩放
+    show: false,  //先不让窗口显示
+    webPreferences: {
+      devTools: false //关闭调试工具
+    },
+    transparent: false, //设置透明
+    hasShadow:false, //不显示阴影
+    alwaysOnTop: true, //窗口是否总是显示在其他窗口之前\
+    // backgroundColor: '#eee',
+    webPreferences: {
+      // Use pluginOptions.nodeIntegration, leave this alone
+      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
+      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      // preload: path.join(__dirname, 'preload.js'),
+    }
+  })
+  //通过获取用户屏幕的宽高来设置悬浮球的初始位置
+  const { left, top } = { left: screen.getPrimaryDisplay().workAreaSize.width - 400, top: screen.getPrimaryDisplay().workAreaSize.height - 200 }
+  win2.setPosition(left, top) //设置悬浮球位置
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    await win2.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}ball`)
+  }else{
+    console.log('???');
+  }
+  ipcMain.on('close-suspension',() => {
+    win2.hide();
+    win.show();
+  })
+}
 
 async function createWindow() {
   // Create the browser window.
-  const win = new BrowserWindow({
+   win = new BrowserWindow({
     frame: false,
     width: 900,
     height: 700,
@@ -32,10 +70,10 @@ async function createWindow() {
       devTools: true,//隐藏调试工具
     }
   })
-
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    createSBallWindow()
     ipcMain.on('show', () => {
       win.restore()
     })
@@ -48,6 +86,10 @@ async function createWindow() {
     ipcMain.on('window-close', function (e) {
       win.hide();    // 隐藏主程序窗口
       // app.exit()
+    })
+    ipcMain.on('ball',function(){
+      win2.show();
+      win.hide();
     })
     // 新建托盘
     tray = new Tray(path.join(__dirname, 'favicon.ico'));
@@ -81,6 +123,7 @@ async function createWindow() {
     win.loadURL('app://./index.html')
   }
 }
+
 
 
 

@@ -3,32 +3,26 @@
     <div class="leftBox flex align-center">Music</div>
     <div class="midBox"></div>
     <div class="rightBox flex align-center">
-      <view class="btn"
-        ><i style="font-size: 26px" class="icon iconfont icon-user"></i
-      ></view><!-- 用户头像 -->
+      <view class="btn"><i style="font-size: 26px" class="icon iconfont icon-user"></i></view><!-- 用户头像 -->
       <view class="btn flex align-end">
         <p class="text-sm">未登录</p>
-        <i
-          style="font-size: 10px; margin-left: 4px"
-          class="icon iconfont icon-arrow-down-filling"
-        ></i>
+        <i style="font-size: 10px; margin-left: 4px" class="icon iconfont icon-arrow-down-filling"></i>
       </view><!-- 登录 -->
       <view class="btn"><i class="icon iconfont icon-yooxi"></i></view><!-- vip -->
       <view class="btn"><i class="icon iconfont icon-down1"></i></view><!-- 下拉框 -->
       <view class="btn"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
-      <view @click="mainMenu" class="btn"> <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" /> <i class="icon iconfont icon-menu"></i></view><!-- 主菜单 -->
+      <view @click="mainMenu" class="btn">
+        <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" /> <i class="icon iconfont icon-menu"></i>
+      </view><!-- 主菜单 -->
       <view class="border"></view>
-      <div class="btn">
+      <div class="btn" @click="ball">
         <i style="font-size: 20px" class="icon iconfont icon-minimize"></i>
       </div>
       <div class="btn" @click="min">
         <i class="icon iconfont icon-2zuixiaohua-1"></i>
       </div>
       <div class="btn" @click="max">
-        <i
-          class="icon iconfont"
-          :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"
-        ></i>
+        <i class="icon iconfont" :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"></i>
       </div>
       <div class="btn" @click="close">
         <i class="icon iconfont icon-close"></i>
@@ -42,17 +36,17 @@ import { ipcRenderer } from "electron";
 import mainMenu from "@/components/bulletFrame/mainMenu.vue";
 export default {
   name: "systemTitle",
-  components:{
+  components: {
     mainMenu
   },
   data() {
     return {
       restore: false,
-      mainMenuShow:false,
+      mainMenuShow: false,
     };
   },
   methods: {
-    mainMenu(){
+    mainMenu() {
       this.mainMenuShow = !this.mainMenuShow
     },
     min() {
@@ -69,6 +63,9 @@ export default {
     close() {
       ipcRenderer.send("window-close");
     },
+    ball() {
+      ipcRenderer.send("ball");
+    }
   },
 };
 </script>
@@ -81,6 +78,7 @@ export default {
   width: 100%;
   padding: 0 10px;
 }
+
 .titleBar {
   .leftBox {
     color: white;
@@ -88,21 +86,27 @@ export default {
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
       "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   }
-  .rightBox {
-  }
+
+  .rightBox {}
 }
+
 .btn {
   padding: 0 10px;
   -webkit-app-region: no-drag;
   position: relative;
   cursor: pointer;
-  i,p{
+
+  i,
+  p {
     transition: all 0.3s;
   }
 }
-.btn:hover > i,.btn:hover > p{
+
+.btn:hover>i,
+.btn:hover>p {
   color: white;
 }
+
 .border {
   margin: 10px;
   width: 1px;
