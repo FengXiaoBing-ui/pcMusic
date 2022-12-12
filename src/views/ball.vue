@@ -1,7 +1,6 @@
 <template>
-    <div class="ballBox">
-        <div style="background:red">123</div>
-        <button @click="close">关闭悬浮窗</button>
+    <div class="ballBox flex justify-end">
+        <div style="color:black" class="no-drag icon iconfont icon-close" @click="close"></div>
     </div>
 </template>
   
@@ -21,10 +20,13 @@ export default {
     overflow: hidden;
     width: 360px;
     height: 160px;
+    border-radius: 10px;
     box-sizing: border-box;
     text-align: center;
     cursor: pointer;
     font-size: 14px;
     color: black;
+    background: white;
+    -webkit-app-region: drag;
 }
 </style>

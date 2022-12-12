@@ -33,7 +33,7 @@
 
 <script>
 import { ipcRenderer } from "electron";
-import mainMenu from "@/components/bulletFrame/mainMenu.vue";
+import mainMenu from "/src/views/topSystemTitle/components/mainMenu";
 export default {
   name: "systemTitle",
   components: {

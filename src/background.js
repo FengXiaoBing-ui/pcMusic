@@ -27,13 +27,11 @@ async function createSBallWindow () {
     webPreferences: {
       devTools: false //关闭调试工具
     },
-    transparent: false, //设置透明
+    transparent: true, //设置透明
     hasShadow:false, //不显示阴影
     alwaysOnTop: true, //窗口是否总是显示在其他窗口之前\
-    // backgroundColor: '#eee',
+    // backgroundColor: rgba(255,255,255,0),
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       // preload: path.join(__dirname, 'preload.js'),
@@ -59,7 +57,7 @@ async function createWindow() {
     frame: false,
     width: 900,
     height: 700,
-    icon: "http://124.220.219.72:8084/static/video/icon.ico",
+    icon: path.join(__dirname, 'favicon.ico'),
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
