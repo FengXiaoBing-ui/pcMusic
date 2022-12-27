@@ -3,6 +3,7 @@ import ball from "/src/views/ball"
 import home from "/src/views/home"
 import musicVideo from "/src/views/midContent/musicVideo"
 import musicHome from "/src/views/midContent/musicHome"
+import theme from "/src/views/midContent/theme"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -23,6 +24,10 @@ const router = createRouter({
                 {
                     path: '/home/musicHome',
                     component: musicHome
+                },
+                {
+                    path: '/home/theme',
+                    component: theme
                 }
             ]
         },

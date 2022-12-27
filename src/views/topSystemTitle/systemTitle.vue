@@ -10,7 +10,7 @@
       </view><!-- 登录 -->
       <view class="btn"><i class="icon iconfont icon-yooxi"></i></view><!-- vip -->
       <view class="btn"><i class="icon iconfont icon-down1"></i></view><!-- 下拉框 -->
-      <view class="btn"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
+      <view class="btn" @click="$router.push('/home/theme')"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
       <view @click="mainMenu" class="btn">
         <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" /> <i class="icon iconfont icon-menu"></i>
       </view><!-- 主菜单 -->
@@ -76,6 +76,7 @@ export default {
   background-color: rgb(198, 47, 47);
   -webkit-app-region: drag;
   width: 100%;
+  height: 8vh;
   padding: 0 10px;
 }
 

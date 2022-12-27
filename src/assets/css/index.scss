@@ -1,6 +1,10 @@
 $color: #e6e6e6;
 $fontSize: 14px;
-$fontFaminly:"微软雅黑";
+$fontFaminly: "微软雅黑";
+$backgroundLeft: #db2f2f;
+$background: #c76666;
+
+
 a,
 p,
 i,
@@ -18,6 +22,8 @@ li {
     font-family: $fontFaminly;
     padding: 0;
     margin: 0;
+    text-decoration: dashed;
+    list-style: none;
 }
 
 // 阿里字体图标设置
@@ -30,101 +36,155 @@ li {
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
 }
-.no-drag{
+.w100{
+    width: 100%;
+}
+.w75{
+    width: 75%;
+}
+.w50{
+    width: 50%;
+}
+.w25{
+    width: 25%;
+}
+.text-left {
+    text-align: left;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.no-drag {
     -webkit-app-region: no-drag;
 }
-.drag{
+
+.drag {
     -webkit-app-region: drag;
 }
-.flex{
+
+.flex {
     display: flex;
 }
-.justify-center{
+
+.flex-direction {
+    flex-direction: column;
+}
+
+.justify-center {
     justify-content: center;
 }
-.justify-between{
+
+.justify-between {
     justify-content: space-between;
 }
-.justify-around{
+
+.justify-around {
     justify-content: space-around;
 }
-.justify-end{
+
+.justify-end {
     justify-content: end;
 }
-.justify-start{
+
+.justify-start {
     justify-content: start;
 }
-.align-center{
+
+.align-center {
     align-items: center;
 }
-.align-stretch{
+
+.align-stretch {
     align-items: stretch;
 }
-.align-end{
+
+.align-end {
     align-items: flex-end;
 }
-.align-start{
+
+.align-start {
     align-items: flex-start;
 }
 
 
-.text-xs{
+.text-xs {
     font-size: 10px;
 }
-.text-sm{
+
+.text-sm {
     font-size: 12px;
 }
-.text-df{
+
+.text-df {
     font-size: $fontSize;
 }
-.text-lg{
+
+.text-lg {
     font-size: 16px;
 }
-.text-xl{
+
+.text-xl {
     font-size: 20px;
 }
 
-.padding{
+.padding {
     padding: 14px;
 }
-.padding-sm{
+
+.padding-sm {
     padding: 12px;
 }
-.padding-xs{
+
+.padding-xs {
     padding: 10px;
 }
-.padding-lg{
+
+.padding-lg {
     padding: 16px;
 }
-.padding-lr{
+
+.padding-lr {
     padding-left: 14px;
     padding-right: 14px;
 }
-.padding-lr-sm{
+
+.padding-lr-sm {
     padding-left: 12px;
     padding-right: 12px;
 }
-.padding-lr-xs{
+
+.padding-lr-xs {
     padding-left: 10px;
     padding-right: 10px;
 }
-.padding-lr-lg{
+
+.padding-lr-lg {
     padding-left: 16px;
     padding-right: 16px;
 }
-.padding-tb{
+
+.padding-tb {
     padding-top: 14px;
     padding-bottom: 14px;
 }
-.padding-tb-sm{
+
+.padding-tb-sm {
     padding-top: 12px;
     padding-bottom: 12px;
 }
-.padding-tb-xs{
+
+.padding-tb-xs {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-.padding-tb-lg{
+
+.padding-tb-lg {
     padding-top: 16px;
     padding-bottom: 16px;
 }

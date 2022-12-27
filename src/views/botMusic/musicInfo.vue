@@ -12,7 +12,7 @@
   
   <style lang="scss" scoped>
   .musicInfo{
-      width: 90vw;
+      width: 88vw;
       height: 10vh;
       background: yellowgreen;
       position: fixed;

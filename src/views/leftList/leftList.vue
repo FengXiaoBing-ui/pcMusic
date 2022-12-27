@@ -1,34 +1,60 @@
 <template>
   <div class="leftList">
-    <router-link class="padding" to="/home/musicVideo">1</router-link>
-    <router-link class="padding" to="/home/musicHome">2</router-link>
-    <div class="padding">3</div>
-    <div class="padding">4</div>
-    <div class="padding">5</div>
+    <div class="flex flex-direction align-start">
+      <div class="w100 padding">在线音乐</div>
+      <router-link class="padding" to="/home/musicVideo">推荐</router-link>
+      <router-link class="padding" to="/home/musicHome">音乐厅</router-link>
+      <router-link class="padding" to="/home/musicVideo">MV</router-link>
+      <router-link class="padding" to="/home/musicHome">电台</router-link>
+    </div>
+    <div class="flex flex-direction align-start">
+      <div class="w100 padding">我的音乐</div>
+      <router-link class="padding" to="/home/musicVideo">我喜欢</router-link>
+      <router-link class="padding" to="/home/musicHome">本地和下载</router-link>
+      <router-link class="padding" to="/home/musicVideo">最近播放</router-link>
+      <router-link class="padding" to="/home/musicHome">试听列表</router-link>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: "leftList",
-    methods:{
-        home(){
+  name: "leftList",
+  methods: {
+    home() {
 
-        },
-        video(){
-            
-        }
+    },
+    video() {
+
     }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.leftList{
-    width: 100px;
-    height: 100%;
-    background: orange;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.leftList {
+  width: 14vw;
+  height: 92vh;
+  overflow-y: auto;
+  background: rgb(115, 139, 66);
+  padding: 20px 0;
+  position: relative;
+  z-index: 1;
+  a{
+    color: white;
+  }
+}
+::-webkit-scrollbar{
+  width: 6px;
+  background-color: transparent;
+}
+::-webkit-scrollbar-track{
+  background-color: transparent;
+  border-right: 1px solid #f1f5fa;
+  //border: 1px solid #f1f5fa;
+}
+::-webkit-scrollbar-thumb{
+  width: 6px;
+  background-color: #00000010;
 }
 </style>
