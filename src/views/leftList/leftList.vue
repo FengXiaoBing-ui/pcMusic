@@ -33,10 +33,9 @@ export default {
 
 <style lang="scss" scoped>
 .leftList {
-  width: 14vw;
+  width: 12vw;
   height: 92vh;
   overflow-y: auto;
-  background: rgb(115, 139, 66);
   padding: 20px 0;
   position: relative;
   z-index: 1;

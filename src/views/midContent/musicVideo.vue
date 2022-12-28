@@ -12,6 +12,5 @@ export default {
 div{
     width: 100%;
     height: 90vh;
-    background: rgb(180, 178, 55);
 }
 </style>

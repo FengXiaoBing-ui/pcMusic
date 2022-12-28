@@ -2,18 +2,19 @@
     <div class="mainContent">
         <router-view />
     </div>
-  </template>
+</template>
   
-  <script>
-  export default {
-      name: "mainContent",
-  }
-  </script>
+<script>
+export default {
+    name: "mainContent",
+}
+</script>
   
-  <style lang="scss" scoped>
-  .mainContent{
-      width: 100%;
-      height: 90vh;
-      background: blue;
-  }
-  </style>
+<style lang="scss" scoped>
+.mainContent {
+    width: 100%;
+    min-height: 90vh;
+    height: 10000px;
+    padding: 20px;
+}
+</style>

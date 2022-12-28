@@ -1,28 +1,23 @@
 <template>
-  <div id="app" class="indexA">
+  <div id="app">
     <router-view />
   </div>
 </template>
 
 <script>
-// import "/src/assets/css/index.scss";
-if (true) {
-import("/src/assets/css/themeA.scss")
-  
-}
 export default {
   name: "App",
   data() {
     return {
-      backgroundA:'red'
     }
+  },
+  created(){
+    window.document.documentElement.setAttribute( "data-theme", 'red');
   },
   methods: {},
 };
 </script>
 <style lang="scss">
-@import "~/src/assets/css/index.scss";
-
 html,
 body,
 div {
@@ -30,8 +25,6 @@ div {
   padding: 0;
   box-sizing: border-box;
 }
-.backgroundA{
-  background: v-bind(backgroundA);
+#app {
 }
-#app {}
 </style>

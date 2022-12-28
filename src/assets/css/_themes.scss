@@ -1,0 +1,63 @@
+$themes: (
+    home:(
+        homeBackground:url('https://pic4.zhimg.com/v2-600c82fc53786a2f489c60e237ef18a5_b.jpg'),
+        leftListBackground: rgba(0, 0, 0, 0.2),
+        systemTitleBackground: rgba(0, 0, 0, 0.2),
+        mainContentBackground: rgba(0, 0, 0, 0),
+        font_color1: #000000,
+    ),
+
+    red: ( //字体
+        font_color1: #ff9d9d,
+
+        //背景
+        systemTitleBackground: rgba(199, 0, 0, 0.8),
+        leftListBackground: rgba(199, 0, 0, 0.8),
+        mainContentBackground: rgba(199, 0, 0, 0.4),
+        musicInfoBackground: rgba(199, 0, 0, 0.4),
+        //边框
+        border_color1: #ffc4c4,
+
+    ),
+
+    green: ( //字体
+        font_color1: #6dff79,
+
+        //背景
+        systemTitleBackground: rgba(63, 199, 0, 0.4),
+        leftListBackground: rgba(0, 199, 10, 0.8),
+        mainContentBackground: rgba(17, 199, 0, 0.4),
+        musicInfoBackground: rgba(0, 199, 10, 0.4),
+
+        //边框
+        border_color1: #c4ffeb,
+
+    ),
+
+    blue: ( //字体
+        font_color1: #5db6ff,
+
+        //背景
+        systemTitleBackground: rgba(0, 109, 199, 0.4),
+        leftListBackground: rgba(0, 136, 199, 0.8),
+        mainContentBackground: rgba(0, 136, 199, 0.4),
+        musicInfoBackground: rgba(0, 126, 199, 0.4),
+
+        //边框
+        border_color1: #afc7ff,
+    ),
+
+    yellow: ( //字体
+        font_color1: #fff89d,
+
+        //背景
+        systemTitleBackground: rgba(199, 162, 0, 0.4),
+        leftListBackground: rgba(196, 199, 0, 0.8),
+        mainContentBackground: rgba(199, 169, 0, 0.4),
+        musicInfoBackground: rgba(186, 199, 0, 0.4),
+
+        //边框
+        border_color1: #fff1c4,
+
+    ),
+);

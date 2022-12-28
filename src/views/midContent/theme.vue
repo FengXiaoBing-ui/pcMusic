@@ -1,7 +1,14 @@
 <template>
     <div class="theme">
         <div>主题</div>
-        <div @click="selectTheme(item)" style="cursor: pointer;" class="padding" v-for="item in list" :key="item">{{ item }}</div>
+        <div class="flex flex-wrap">
+            <div 
+        @click="selectTheme(item.key)"
+        :style="'cursor: pointer;'+(item.type==='color'?('background:'+item.color):('background-image: url('+item.url+')'))" 
+        class="padding themeBox" 
+        v-for="item in themesList" 
+        :key="item.name">{{ item.name }}</div>
+        </div>
     </div>
 </template>
   
@@ -10,14 +17,43 @@ export default {
     name: "themeIndex",
     data() {
         return {
-            list:[
-                "red","green","blue","yellow"
+            themesList:[
+                {
+                    name:"red",
+                    color:"red",
+                    key:"red",
+                    type:"color"
+                },
+                {
+                    name:"green",
+                    color:"green",
+                    key:"green",
+                    type:"color"
+                },
+                {
+                    name:"blue",
+                    color:"blue",
+                    key:"blue",
+                    type:"color"
+                },
+                {
+                    name:"yellow",
+                    color:"yellow",
+                    key:"yellow",
+                    type:"color"
+                },
+                {
+                    name:"哪吒",
+                    key:"home",
+                    url:"https://pic4.zhimg.com/v2-600c82fc53786a2f489c60e237ef18a5_b.jpg",
+                    type:"image"
+                }
             ]
         }
     },
     methods:{
         selectTheme(color){
-            
+            window.document.documentElement.setAttribute( "data-theme", color);
         }
     }
 }
@@ -27,6 +63,15 @@ export default {
 .theme {
     width: 100%;
     height: 90vh;
-    background: rgb(180, 101, 55);
+}
+.themeBox{
+    width: 18%;
+    height: 100px;
+    margin: 16px 16px 0 0;
+    border-radius: 10px;
+    background-size: 100%;
+    &:nth-child(5n){
+        margin-right: 0;
+    }
 }
 </style>

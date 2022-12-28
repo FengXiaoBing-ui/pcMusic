@@ -1,9 +1,8 @@
-$color: #e6e6e6;
+
 $fontSize: 14px;
 $fontFaminly: "微软雅黑";
 $backgroundLeft: #db2f2f;
 $background: #c76666;
-
 
 a,
 p,
@@ -17,7 +16,7 @@ h4,
 h5,
 ul,
 li {
-    color: $color;
+    color: #e6e6e6;
     font-size: $fontSize;
     font-family: $fontFaminly;
     padding: 0;
@@ -70,6 +69,9 @@ li {
 
 .flex {
     display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
 }
 
 .flex-direction {

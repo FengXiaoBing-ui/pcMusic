@@ -73,7 +73,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 #appChild {
-  background-color: rgb(198, 47, 47);
   -webkit-app-region: drag;
   width: 100%;
   height: 8vh;

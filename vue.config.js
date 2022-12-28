@@ -7,4 +7,14 @@ module.exports = defineConfig({
       nodeIntegration: true,
     },
   },
+  css: {
+    loaderOptions:{
+      scss:{
+        prependData:`@import "@/assets/css/index.scss"; @import "@/assets/css/_handle.scss";`
+      },
+      sass:{
+        prependData:`@import "@/assets/css/index.scss"; @import "@/assets/css/_handle.scss";`
+      }
+    }
+  }
 })
