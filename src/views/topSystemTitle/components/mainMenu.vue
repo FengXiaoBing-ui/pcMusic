@@ -25,11 +25,12 @@ export default {
     left: -10px;
     width: 200px;
     border-radius: 10px;
-    background-color: rgb(198, 47, 47);
+    background-color: white;
     opacity: 0;
     transform: scale(1, 0);
     transform-origin: top;
     transition: all 0.1s;
+    z-index: 2;
 
     &::before {
         content: '';
@@ -39,7 +40,7 @@ export default {
         left: 16px;
         width: 0px;
         height: 0px;
-        border-bottom: 10px solid rgb(198, 47, 47);
+        border-bottom: 10px solid white;
         border-left: 10px solid transparent;
         border-right: 10px solid transparent;
     }

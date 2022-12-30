@@ -1,16 +1,23 @@
-<template>
-  <div>musicHome</div>
-</template>
 
+<template>
+  <div class="lj-obj"></div>
+</template>
 <script>
 export default {
   name: "musicHome",
+  data() {
+    return {
+    };
+  },
+  methods: {
+
+  },
+  mounted() {
+
+  },
 };
 </script>
 
-<style lang="scss" scoped>
-div {
-  width: 100%;
-  height: 90vh;
-}
+<style scoped lang="scss">
+
 </style>

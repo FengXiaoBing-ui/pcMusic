@@ -4,6 +4,7 @@ import home from "/src/views/home"
 import musicVideo from "/src/views/midContent/musicVideo"
 import musicHome from "/src/views/midContent/musicHome"
 import theme from "/src/views/midContent/theme"
+import recommend from "/src/views/midContent/recommend"
 
 const router = createRouter({
     history: createWebHistory(),
@@ -28,6 +29,10 @@ const router = createRouter({
                 {
                     path: '/home/theme',
                     component: theme
+                },
+                {
+                    path:"/home/recommend",
+                    component: recommend
                 }
             ]
         },

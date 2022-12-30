@@ -16,9 +16,8 @@ h4,
 h5,
 ul,
 li {
-    color: #e6e6e6;
-    font-size: $fontSize;
-    font-family: $fontFaminly;
+    font-size: 14px;
+    font-family: "微软雅黑";
     padding: 0;
     margin: 0;
     text-decoration: dashed;
@@ -35,6 +34,7 @@ li {
     -webkit-text-stroke-width: 0.2px;
     -moz-osx-font-smoothing: grayscale;
 }
+
 .w100{
     width: 100%;
 }
@@ -135,6 +135,13 @@ li {
     font-size: 20px;
 }
 
+.text-white{
+    color: white;
+}
+.text-black{
+    color: black;
+}
+
 .padding {
     padding: 14px;
 }
@@ -189,4 +196,64 @@ li {
 .padding-tb-lg {
     padding-top: 16px;
     padding-bottom: 16px;
+}
+
+
+
+
+
+.margin {
+    margin: 14px;
+}
+
+.margin-sm {
+    margin: 12px;
+}
+
+.margin-xs {
+    margin: 10px;
+}
+
+.margin-lg {
+    margin: 16px;
+}
+
+.margin-lr {
+    margin-left: 14px;
+    margin-right: 14px;
+}
+
+.margin-lr-sm {
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.margin-lr-xs {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.margin-lr-lg {
+    margin-left: 16px;
+    margin-right: 16px;
+}
+
+.margin-tb {
+    margin-top: 14px;
+    margin-bottom: 14px;
+}
+
+.margin-tb-sm {
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.margin-tb-xs {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.margin-tb-lg {
+    margin-top: 16px;
+    margin-bottom: 16px;
 }

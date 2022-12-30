@@ -50,16 +50,19 @@ export default {
   z-index: 1;
   @include background_color("mainContentBackground");
 }
-::-webkit-scrollbar{
+
+::-webkit-scrollbar {
   width: 6px;
   background-color: transparent;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
   background-color: transparent;
   border-right: 1px solid #f1f5fa;
   //border: 1px solid #f1f5fa;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   width: 6px;
   background-color: #00000010;
 }

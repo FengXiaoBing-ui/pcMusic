@@ -1,18 +1,10 @@
 <template>
-  <div class="leftList">
+  <div class="leftList padding">
     <div class="flex flex-direction align-start">
-      <div class="w100 padding">在线音乐</div>
-      <router-link class="padding" to="/home/musicVideo">推荐</router-link>
-      <router-link class="padding" to="/home/musicHome">音乐厅</router-link>
-      <router-link class="padding" to="/home/musicVideo">MV</router-link>
-      <router-link class="padding" to="/home/musicHome">电台</router-link>
-    </div>
-    <div class="flex flex-direction align-start">
-      <div class="w100 padding">我的音乐</div>
-      <router-link class="padding" to="/home/musicVideo">我喜欢</router-link>
-      <router-link class="padding" to="/home/musicHome">本地和下载</router-link>
-      <router-link class="padding" to="/home/musicVideo">最近播放</router-link>
-      <router-link class="padding" to="/home/musicHome">试听列表</router-link>
+      <template v-for="(item,index) in linkList" :key="index">
+        <div v-if="item.title" class="w100 title" style="color: #e3e3e3;">{{ item.title }}</div>
+        <router-link @click="selectTab(childIndex,item.title)" v-for="(child,childIndex) in item.children" :key="childIndex" class="routerLink" :class="activeIndex===(childIndex+item.title)?'active':''" :to="child.link">{{ child.name }}</router-link>
+      </template>
     </div>
   </div>
 </template>
@@ -20,12 +12,58 @@
 <script>
 export default {
   name: "leftList",
+  data() {
+    return {
+      activeIndex:0+"在线音乐",
+      linkList: [
+        {
+          title: "在线音乐",
+          children: [
+            {
+              name: "推荐",
+              link: "/home/recommend"
+            },
+            {
+              name: "音乐厅",
+              link: "/home/musicHome"
+            },
+            {
+              name: "MV",
+              link: "/home/musicVideo"
+            },
+            {
+              name: "电台",
+              link: "/home/musicHome"
+            },
+          ]
+        },
+        {
+          title: "我的音乐",
+          children: [
+            {
+              name: "我喜欢",
+              link: "/home/musicVideo"
+            },
+            {
+              name: "本地和下载",
+              link: "/home/musicHome"
+            },
+            {
+              name: "最近播放",
+              link: "/home/musicVideo"
+            },
+            {
+              name: "试听列表",
+              link: "/home/musicHome"
+            }
+          ]
+        }
+      ]
+    }
+  },
   methods: {
-    home() {
-
-    },
-    video() {
-
+    selectTab(childIndex,title){
+      this.activeIndex = childIndex+title
     }
   }
 }
@@ -39,20 +77,39 @@ export default {
   padding: 20px 0;
   position: relative;
   z-index: 1;
-  a{
+  @include font_color("systemTitlefont_color");
+  .title{
+    padding: 10px 0;
+  }
+  .routerLink{
+    width: 100%;
+    padding: 8px 10px;
+    margin: 6px 0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    &:hover{
+      background-color: rgba(0,0,0,0.1);
+    }
+  }
+  a {
     color: white;
   }
 }
-::-webkit-scrollbar{
+.active{
+  @include background_color("leftListBackground");
+}
+::-webkit-scrollbar {
   width: 6px;
   background-color: transparent;
 }
-::-webkit-scrollbar-track{
+
+::-webkit-scrollbar-track {
   background-color: transparent;
   border-right: 1px solid #f1f5fa;
   //border: 1px solid #f1f5fa;
 }
-::-webkit-scrollbar-thumb{
+
+::-webkit-scrollbar-thumb {
   width: 6px;
   background-color: #00000010;
 }

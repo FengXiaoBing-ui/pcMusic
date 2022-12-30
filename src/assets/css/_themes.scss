@@ -1,10 +1,11 @@
 $themes: (
     home:(
         homeBackground:url('https://pic4.zhimg.com/v2-600c82fc53786a2f489c60e237ef18a5_b.jpg'),
-        leftListBackground: rgba(0, 0, 0, 0.2),
-        systemTitleBackground: rgba(0, 0, 0, 0.2),
-        mainContentBackground: rgba(0, 0, 0, 0),
+        leftListBackground: rgba(0, 0, 0, 0),
+        systemTitleBackground: rgba(0, 0, 0, 0),
+        mainContentBackground: rgba(0, 0, 0, 0.2),
         font_color1: #000000,
+        systemTitlefont_color:#ffffff,
     ),
 
     red: ( //字体

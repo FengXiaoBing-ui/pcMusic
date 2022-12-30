@@ -1,7 +1,15 @@
 <template>
   <div id="appChild" class="titleBar flex justify-between align-center">
     <div class="leftBox flex align-center">Music</div>
-    <div class="midBox"></div>
+    <div class="midBox">
+      <div class="searchBox">
+        <i class="icon iconfont icon-search searchIcon"></i>
+        <input @focus="focus" @blur="blur" class="btn input" type="text" placeholder="搜索" placeholderClass="placeholder text-sm">
+        <div class="" :class="searchResutBoxShow?'searchResutBoxShow':'searchResutBox'">
+          
+        </div>
+      </div>
+    </div>
     <div class="rightBox flex align-center">
       <view class="btn"><i style="font-size: 26px" class="icon iconfont icon-user"></i></view><!-- 用户头像 -->
       <view class="btn flex align-end">
@@ -43,6 +51,7 @@ export default {
     return {
       restore: false,
       mainMenuShow: false,
+      searchResutBoxShow:false,
     };
   },
   methods: {
@@ -65,6 +74,13 @@ export default {
     },
     ball() {
       ipcRenderer.send("ball");
+    },
+    focus(){
+      this.searchResutBoxShow = true
+      console.log(this.$utils.debounce);
+    },
+    blur(){
+      this.searchResutBoxShow = false
     }
   },
 };
@@ -77,6 +93,7 @@ export default {
   width: 100%;
   height: 8vh;
   padding: 0 10px;
+  @include font_color("systemTitlefont_color")
 }
 
 .titleBar {
@@ -85,6 +102,60 @@ export default {
     font-style: oblique;
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
       "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  }
+
+  .midBox {
+    .searchBox{
+      position: relative;
+      .searchResutBox{
+        position: absolute;
+        left: 0;
+        top: 40px;
+        widows: 0;
+        height: 0;
+        transform-origin: left top;
+        opacity: 0;
+        transform: scale(0);
+      }
+      .searchResutBoxShow{
+        position: absolute;
+        -webkit-app-region: no-drag;
+        transform-origin: left top;
+        transition: all 0.3s;
+        left: 0;
+        transform: scale(1);
+        opacity: 1;
+        top: 40px;
+        width: 200%;
+        height: 200px;
+        background-color: white;
+        box-shadow: 1px 1px 10px rgb(77, 77, 77);
+        border-radius: 10px;
+        z-index: 2;
+      }
+      .input {
+        outline: none;
+        border: none;
+        background-color: rgb(214, 214, 214);
+        padding: 8px 10px;
+        padding-left: 30px;
+        border-radius: 20px;
+      }
+  
+      .placeholder {
+        font-size: 10px;
+      }
+  
+      .searchIcon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: gray;
+        z-index: 1;
+      }
+    }
+    
   }
 
   .rightBox {}
