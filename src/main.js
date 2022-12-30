@@ -1,4 +1,4 @@
-import { createApp,useRouter } from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router/router'
 import utils from './utils/tool.js'
@@ -9,7 +9,7 @@ import '/src/assets/font/iconfont.css'
 const app = createApp(App)
 
 app.config.globalProperties.$utils = utils
-app.config.globalProperties.$router = useRouter
+app.config.globalProperties.$router = router
 
 app.component('modTitle',modTitle)
 app.component('hoverBox',hoverBox)
