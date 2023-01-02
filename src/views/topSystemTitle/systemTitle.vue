@@ -4,24 +4,42 @@
     <div class="midBox">
       <div class="searchBox">
         <i class="icon iconfont icon-search searchIcon"></i>
-        <input @focus="focus" @blur="blur" class="btn input" type="text" placeholder="搜索" placeholderClass="placeholder text-sm">
-        <div class="" :class="searchResutBoxShow?'searchResutBoxShow':'searchResutBox'">
-          
-        </div>
+        <input
+          @focus="focus"
+          @blur="blur"
+          class="btn input"
+          type="text"
+          placeholder="搜索"
+          placeholderClass="placeholder text-sm"
+        />
+        <div
+          class=""
+          :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"
+        ></div>
       </div>
     </div>
     <div class="rightBox flex align-center">
-      <view class="btn"><i style="font-size: 26px" class="icon iconfont icon-user"></i></view><!-- 用户头像 -->
+      <view id="qqLoginBtn" class="btn"
+        ><i style="font-size: 26px" class="icon iconfont icon-user"></i></view
+      ><!-- 用户头像 -->
       <view class="btn flex align-end">
         <p class="text-sm">未登录</p>
-        <i style="font-size: 10px; margin-left: 4px" class="icon iconfont icon-arrow-down-filling"></i>
-      </view><!-- 登录 -->
-      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view><!-- vip -->
-      <view class="btn"><i class="icon iconfont icon-down1"></i></view><!-- 下拉框 -->
-      <view class="btn" @click="$router.push('/home/theme')"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
+        <i
+          style="font-size: 10px; margin-left: 4px"
+          class="icon iconfont icon-arrow-down-filling"
+        ></i> </view
+      ><!-- 登录 -->
+      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view
+      ><!-- vip -->
+      <view class="btn"><i class="icon iconfont icon-down1"></i></view
+      ><!-- 下拉框 -->
+      <view class="btn" @click="$router.push('/home/theme')"
+        ><i class="icon iconfont icon-skin"></i></view
+      ><!-- 皮肤 -->
       <view @click="mainMenu" class="btn">
-        <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" /> <i class="icon iconfont icon-menu"></i>
-      </view><!-- 主菜单 -->
+        <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" />
+        <i class="icon iconfont icon-menu"></i> </view
+      ><!-- 主菜单 -->
       <view class="border"></view>
       <div class="btn" @click="ball">
         <i style="font-size: 20px" class="icon iconfont icon-minimize"></i>
@@ -30,7 +48,10 @@
         <i class="icon iconfont icon-2zuixiaohua-1"></i>
       </div>
       <div class="btn" @click="max">
-        <i class="icon iconfont" :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"></i>
+        <i
+          class="icon iconfont"
+          :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"
+        ></i>
       </div>
       <div class="btn" @click="close">
         <i class="icon iconfont icon-close"></i>
@@ -45,18 +66,24 @@ import mainMenu from "/src/views/topSystemTitle/components/mainMenu";
 export default {
   name: "systemTitle",
   components: {
-    mainMenu
+    mainMenu,
   },
   data() {
     return {
       restore: false,
       mainMenuShow: false,
-      searchResutBoxShow:false,
+      searchResutBoxShow: false,
     };
+  },
+  mounted(){
+    // 组件渲染完毕，使用QC生成QQ登录按钮
+    window.QC.Login({
+    		btnId: 'qqLoginBtn'
+  		})
   },
   methods: {
     mainMenu() {
-      this.mainMenuShow = !this.mainMenuShow
+      this.mainMenuShow = !this.mainMenuShow;
     },
     min() {
       ipcRenderer.send("min-app");
@@ -75,13 +102,13 @@ export default {
     ball() {
       ipcRenderer.send("ball");
     },
-    focus(){
-      this.searchResutBoxShow = true
+    focus() {
+      this.searchResutBoxShow = true;
       console.log(this.$utils.debounce);
     },
-    blur(){
-      this.searchResutBoxShow = false
-    }
+    blur() {
+      this.searchResutBoxShow = false;
+    },
   },
 };
 </script>
@@ -93,7 +120,7 @@ export default {
   width: 100%;
   height: 8vh;
   padding: 0 10px;
-  @include font_color("systemTitlefont_color")
+  @include font_color("systemTitlefont_color");
 }
 
 .titleBar {
@@ -105,9 +132,9 @@ export default {
   }
 
   .midBox {
-    .searchBox{
+    .searchBox {
       position: relative;
-      .searchResutBox{
+      .searchResutBox {
         position: absolute;
         left: 0;
         top: 40px;
@@ -117,7 +144,7 @@ export default {
         opacity: 0;
         transform: scale(0);
       }
-      .searchResutBoxShow{
+      .searchResutBoxShow {
         position: absolute;
         -webkit-app-region: no-drag;
         transform-origin: left top;
@@ -141,11 +168,11 @@ export default {
         padding-left: 30px;
         border-radius: 20px;
       }
-  
+
       .placeholder {
         font-size: 10px;
       }
-  
+
       .searchIcon {
         position: absolute;
         left: 10px;
@@ -155,10 +182,10 @@ export default {
         z-index: 1;
       }
     }
-    
   }
 
-  .rightBox {}
+  .rightBox {
+  }
 }
 
 .btn {
@@ -173,8 +200,8 @@ export default {
   }
 }
 
-.btn:hover>i,
-.btn:hover>p {
+.btn:hover > i,
+.btn:hover > p {
   color: white;
 }
 

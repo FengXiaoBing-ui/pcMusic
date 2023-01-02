@@ -13,13 +13,9 @@
   },
   "main": "background.js",
   "dependencies": {
-    "axios": "^1.2.0",
+    "axios": "^1.2.2",
     "core-js": "^3.8.3",
     "node-polyfill-webpack-plugin": "^2.0.1",
-    "three": "^0.148.0",
-    "three-css2drender": "^1.0.0",
-    "three-obj-mtl-loader": "^1.0.3",
-    "three-orbit-controls": "^82.1.0",
     "vue": "^3.2.13",
     "vue-router": "^4.1.6"
   },

@@ -12,12 +12,17 @@ const router = createRouter({
         {
             path: '/',
             redirect:'/home',
-            mponent: home
+            component: home
         },
         {
             path: '/home',
             component: home,
+            redirect:"/home/recommend",
             children:[
+                {
+                    path:"/home/recommend",
+                    component: recommend
+                },
                 {
                     path: '/home/musicVideo',
                     component: musicVideo
@@ -29,10 +34,6 @@ const router = createRouter({
                 {
                     path: '/home/theme',
                     component: theme
-                },
-                {
-                    path:"/home/recommend",
-                    component: recommend
                 }
             ]
         },
