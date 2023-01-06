@@ -1,6 +1,11 @@
 <template>
     <div class="mainContent">
-        <router-view />
+        <!-- <router-view v-slot="{ Component }">
+            <keep-alive>
+                <component :is="Component" />
+            </keep-alive>
+        </router-view> -->
+        <router-view/>
     </div>
 </template>
   
@@ -14,7 +19,6 @@ export default {
 .mainContent {
     width: 100%;
     min-height: 90vh;
-    height: 10000px;
     padding: 20px;
 }
 </style>

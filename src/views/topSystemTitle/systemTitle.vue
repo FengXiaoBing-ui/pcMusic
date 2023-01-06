@@ -4,42 +4,27 @@
     <div class="midBox">
       <div class="searchBox">
         <i class="icon iconfont icon-search searchIcon"></i>
-        <input
-          @focus="focus"
-          @blur="blur"
-          class="btn input"
-          type="text"
-          placeholder="搜索"
-          placeholderClass="placeholder text-sm"
-        />
-        <div
-          class=""
-          :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"
-        ></div>
+        <input @focus="focus" @blur="blur" class="btn input" type="text" placeholder="搜索"
+          placeholderClass="placeholder text-sm" />
+        <div class="" :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"></div>
       </div>
     </div>
     <div class="rightBox flex align-center">
-      <view id="qqLoginBtn" class="btn"
-        ><i style="font-size: 26px" class="icon iconfont icon-user"></i></view
-      ><!-- 用户头像 -->
+      <view @click="login" class="btn">
+        <img v-if="userInfo.headpic" class="userImg" :src="userInfo.headpic" />
+        <i v-else style="font-size: 26px" class="icon iconfont icon-user"></i>
+      </view><!-- 用户头像 -->
       <view class="btn flex align-end">
-        <p class="text-sm">未登录</p>
-        <i
-          style="font-size: 10px; margin-left: 4px"
-          class="icon iconfont icon-arrow-down-filling"
-        ></i> </view
-      ><!-- 登录 -->
-      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view
-      ><!-- vip -->
-      <view class="btn"><i class="icon iconfont icon-down1"></i></view
-      ><!-- 下拉框 -->
-      <view class="btn" @click="$router.push('/home/theme')"
-        ><i class="icon iconfont icon-skin"></i></view
-      ><!-- 皮肤 -->
+        <p>{{ userInfo.nick }}</p>
+        <i style="font-size: 10px; margin-left: 4px" class="icon iconfont icon-arrow-down-filling"></i>
+      </view><!-- 登录 -->
+      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view><!-- vip -->
+      <view class="btn"><i class="icon iconfont icon-down1"></i></view><!-- 下拉框 -->
+      <view class="btn" @click="$router.push('/home/theme')"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
       <view @click="mainMenu" class="btn">
-        <mainMenu ::key="mainMenuShow" :mainMenuShow="mainMenuShow" />
-        <i class="icon iconfont icon-menu"></i> </view
-      ><!-- 主菜单 -->
+        <mainMenu :key="mainMenuShow" :mainMenuShow="mainMenuShow" />
+        <i class="icon iconfont icon-menu"></i>
+      </view><!-- 主菜单 -->
       <view class="border"></view>
       <div class="btn" @click="ball">
         <i style="font-size: 20px" class="icon iconfont icon-minimize"></i>
@@ -48,10 +33,7 @@
         <i class="icon iconfont icon-2zuixiaohua-1"></i>
       </div>
       <div class="btn" @click="max">
-        <i
-          class="icon iconfont"
-          :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"
-        ></i>
+        <i class="icon iconfont" :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"></i>
       </div>
       <div class="btn" @click="close">
         <i class="icon iconfont icon-close"></i>
@@ -61,7 +43,7 @@
 </template>
 
 <script>
-import { ipcRenderer } from "electron";
+const { ipcRenderer } = window.require('electron')
 import mainMenu from "/src/views/topSystemTitle/components/mainMenu";
 export default {
   name: "systemTitle",
@@ -73,15 +55,26 @@ export default {
       restore: false,
       mainMenuShow: false,
       searchResutBoxShow: false,
+      userInfo:{
+        nick:"未登录",
+        headpic:""
+      }
     };
   },
-  mounted(){
-    // 组件渲染完毕，使用QC生成QQ登录按钮
-    window.QC.Login({
-    		btnId: 'qqLoginBtn'
-  		})
+  created(){
+    this.getUserDetail()
+  },
+  mounted() {
   },
   methods: {
+    async getUserDetail(){
+      let res = await this.$request.getUserDetail();
+      this.userInfo = res.data.creator
+      console.log(this.userInfo.nick);
+    },
+    login() {
+      window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101558818&response_type=token&scope=all&redirect_uri=http://www.jixueit.cn%2Fqq%2Fcallback', 'oauth2Login_10021' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes')
+    },
     mainMenu() {
       this.mainMenuShow = !this.mainMenuShow;
     },
@@ -122,7 +115,6 @@ export default {
   padding: 0 10px;
   @include font_color("systemTitlefont_color");
 }
-
 .titleBar {
   .leftBox {
     color: white;
@@ -134,6 +126,7 @@ export default {
   .midBox {
     .searchBox {
       position: relative;
+
       .searchResutBox {
         position: absolute;
         left: 0;
@@ -144,6 +137,7 @@ export default {
         opacity: 0;
         transform: scale(0);
       }
+
       .searchResutBoxShow {
         position: absolute;
         -webkit-app-region: no-drag;
@@ -160,6 +154,7 @@ export default {
         border-radius: 10px;
         z-index: 2;
       }
+
       .input {
         outline: none;
         border: none;
@@ -185,6 +180,11 @@ export default {
   }
 
   .rightBox {
+    .userImg{
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+    }
   }
 }
 
@@ -200,8 +200,8 @@ export default {
   }
 }
 
-.btn:hover > i,
-.btn:hover > p {
+.btn:hover>i,
+.btn:hover>p {
   color: white;
 }
 

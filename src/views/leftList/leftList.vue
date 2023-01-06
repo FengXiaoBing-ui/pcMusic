@@ -1,5 +1,5 @@
 <template>
-  <div class="leftList padding">
+  <div class="leftList padding-xs">
     <div class="flex flex-direction align-start">
       <template v-for="(item,index) in linkList" :key="index">
         <div v-if="item.title" class="w100 title" style="color: #e3e3e3;">{{ item.title }}</div>

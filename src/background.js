@@ -24,16 +24,16 @@ async function createSBallWindow () {
     frame: false,  //要创建无边框窗口
     resizable: false, //禁止窗口大小缩放
     show: false,  //先不让窗口显示
-    webPreferences: {
-      devTools: false //关闭调试工具
-    },
     transparent: true, //设置透明
     hasShadow:false, //不显示阴影
     alwaysOnTop: true, //窗口是否总是显示在其他窗口之前\
     // backgroundColor: rgba(255,255,255,0),
     webPreferences: {
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      nodeIntegration: true,    // 是否集成 Nodejs
+        enableRemoteModule: true,
+        contextIsolation: false,
+        // 关闭同源策略 解决跨域
+        webSecurity: false,
       // preload: path.join(__dirname, 'preload.js'),
     }
   })
@@ -55,14 +55,16 @@ async function createWindow() {
   // Create the browser window.
    win = new BrowserWindow({
     frame: false,
-    width: 900,
-    height: 700,
+    width: 1200,
+    height: 800,
+    minWidth: 1100,
+    minHeight: 700,
     icon: path.join(__dirname, 'favicon.ico'),
     webPreferences: {
 
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
-      nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
+      // nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       nodeIntegration: true,
       devTools: true,//隐藏调试工具

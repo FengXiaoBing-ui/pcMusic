@@ -1,6 +1,8 @@
 @font-face {
-  font-family: "iconfont"; /* Project id  */
-  src: url('iconfont.ttf?t=1670416553908') format('truetype');
+  font-family: "iconfont"; /* Project id 3814785 */
+  src: url('iconfont.woff2?t=1672989089497') format('woff2'),
+       url('iconfont.woff?t=1672989089497') format('woff'),
+       url('iconfont.ttf?t=1672989089497') format('truetype');
 }
 
 .iconfont {
@@ -9,6 +11,66 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-delete:before {
+  content: "\e6b4";
+}
+
+.icon-top:before {
+  content: "\e61e";
+}
+
+.icon-link:before {
+  content: "\e7e2";
+}
+
+.icon-comment:before {
+  content: "\e63b";
+}
+
+.icon-liebiaoshunxu:before {
+  content: "\e802";
+}
+
+.icon-play-filling:before {
+  content: "\e87e";
+}
+
+.icon-suijisenlin:before {
+  content: "\e60e";
+}
+
+.icon-play:before {
+  content: "\e645";
+}
+
+.icon-loop:before {
+  content: "\e69d";
+}
+
+.icon-download:before {
+  content: "\e617";
+}
+
+.icon-more:before {
+  content: "\e679";
+}
+
+.icon-icon-piliangcaozuo:before {
+  content: "\e675";
+}
+
+.icon-hanhan-01-01:before {
+  content: "\e6ae";
+}
+
+.icon-bofangMV:before {
+  content: "\e6a4";
+}
+
+.icon-shouqi:before {
+  content: "\e604";
 }
 
 .icon-roundrightfill:before {

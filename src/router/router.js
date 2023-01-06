@@ -1,45 +1,63 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import ball from "/src/views/ball"
-import home from "/src/views/home"
-import musicVideo from "/src/views/midContent/musicVideo"
-import musicHome from "/src/views/midContent/musicHome"
-import theme from "/src/views/midContent/theme"
-import recommend from "/src/views/midContent/recommend"
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory("/"),
     routes: [
         {
             path: '/',
             redirect:'/home',
-            component: home
+            name:"/",
+            meta:{
+                keepAlive: true //此页面需要缓存
+            }
         },
         {
             path: '/home',
-            component: home,
+            component: () => import('/src/views/home.vue'),
             redirect:"/home/recommend",
+            name:"home",
             children:[
                 {
                     path:"/home/recommend",
-                    component: recommend
+                    name:"homeRecommend",
+                    component: () => import('/src/views/midContent/recommend.vue'),
+                    meta:{
+                        keepAlive: true //此页面需要缓存
+                    }
                 },
                 {
                     path: '/home/musicVideo',
-                    component: musicVideo
+                    name:"homeMusicVideo",
+                    component: () => import('/src/views/midContent/musicVideo.vue'),
+                    meta:{
+                        keepAlive: true //此页面需要缓存
+                    }
                 },
                 {
                     path: '/home/musicHome',
-                    component: musicHome
+                    name:"homeMusicHome",
+                    component: () => import('/src/views/midContent/musicHome.vue'),
+                    meta:{
+                        keepAlive: true //此页面需要缓存
+                    }
                 },
                 {
                     path: '/home/theme',
-                    component: theme
+                    name:"homeTheme",
+                    component: () => import('/src/views/midContent/theme.vue'),
+                    meta:{
+                        keepAlive: true //此页面需要缓存
+                    }
                 }
-            ]
+            ],
+            meta:{
+                keepAlive: true //此页面需要缓存
+            }
         },
         {
             path: '/ball',
-            component: ball
+            name:"ball",
+            component: () => import('/src/views/ball.vue')
         }
     ]
 })
