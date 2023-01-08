@@ -4,7 +4,7 @@
 
     <modTitle class="margin-tb-sm" title="你好 謨 今日为你推荐" />
     <div class="grid recommend w100" :class="col">
-      <div class="padding-tb-xs padding-right-sm" v-for="(item,index) in recommend.slice(0,col==='col-5'?10:12)" :key="item.content_id">
+      <div class="padding-tb-xs padding-right-sm" v-for="(item,index) in recomPlaylist.slice(0,col==='col-5'?10:12)" :key="item.content_id">
         <hoverBox isPlayIcon mode="top">
           <img class="img" @error="imgError(index)" :src="item.cover" alt="" />
         </hoverBox>
@@ -12,9 +12,9 @@
       </div>
     </div>
 
-    <modTitle class="margin-tb" title="官方推荐歌单" />
-    <div class="grid recommend w100" :class="col">
-      <div class="padding-tb-xs padding-right-sm" v-for="item in officialRecommend.slice(0,col==='col-5'?10:12)" :key="item.content_id">
+    <modTitle class="margin-tb" title="新歌首发" />
+    <div class="grid recommend col-6 w100">
+      <div class="padding-tb-xs padding-right-sm" v-for="item in playlist" :key="item.tid">
         <hoverBox isPlayIcon mode="top">
           <img class="img" :src="item.cover_url_big" alt="" />
         </hoverBox>
@@ -24,12 +24,13 @@
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex';
 export default {
   name: "musicRecommend",
   data() {
     return {
-      recommend: [],
-      officialRecommend:[],
+      recomPlaylist: [],
+      playlist:[],
       col:"col-5",
       isImgError:false
     }
@@ -47,11 +48,13 @@ export default {
     }
   },
   methods: {
+    ...mapMutations('musicInfo',['setMusicList']),
     async getData() {
       let res = await this.$request.getRecommend();
-      this.recommend = res.data.list
-      let res2 = await this.$request.getRecommendPlaylist();
-      this.officialRecommend = res2.data.list
+      console.log(res.response);
+      this.recomPlaylist = res.response.recomPlaylist.data.v_hot
+      this.playlist = res.response.playlist.data.v_playlist
+      this.setMusicList(res.response.new_song.data.songlist)
       // let res2 = await this.$request.getUserDetail();
       // let res3 = await this.$request.getUserSonglist();
       // let res4 = await this.$request.getUserCollectSonglist();

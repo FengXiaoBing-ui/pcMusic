@@ -40,7 +40,7 @@ function setCookie(){
 }
 function getRecommend(){
     return new Promise((resolve,reject) => {
-        axiosApi('/recommend/playlist/u',{},'get').then( res => {
+        axiosApi('/getRecommend',{},'get').then( res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -103,7 +103,7 @@ function getRecommendDaily(){
 }
 function getSongUrl(params){
     return new Promise((resolve,reject) => {
-        axiosApi('/song/urls',params,'get').then( res => {
+        axiosApi('/getMusicPlay',params,'get').then( res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -112,7 +112,34 @@ function getSongUrl(params){
 }
 function getSong(params){
     return new Promise((resolve,reject) => {
-        axiosApi('/song',params,'get').then( res => {
+        axiosApi('/getSongInfo',params,'get').then( res => {
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+function getDearchHot(params = {}){
+    return new Promise((resolve,reject) => {
+        axiosApi('/search/hot',params,'get').then( res => {
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+function getSearch(params = {}){
+    return new Promise((resolve,reject) => {
+        axiosApi('/getSmartbox',params,'get').then( res => {
+            resolve(res)
+        }).catch(err => {
+            reject(err)
+        })
+    })
+}
+function getSearchByKey(params = {}){
+    return new Promise((resolve,reject) => {
+        axiosApi('/getSearchByKey',params,'get').then( res => {
             resolve(res)
         }).catch(err => {
             reject(err)
@@ -133,4 +160,7 @@ export default {
     getRecommendDaily,//日推
     getSongUrl,//获取歌曲播放链接
     getSong,//获取单个歌曲信息
+    getDearchHot,//获取热搜词
+    getSearch,//获取搜索关键词
+    getSearchByKey,//获取搜索结果
 }

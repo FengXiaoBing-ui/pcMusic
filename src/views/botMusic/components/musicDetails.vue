@@ -10,7 +10,7 @@ export default {
   name: "musicDetails",
   data() {
     return {
-      bottom: ''
+      bottom: '-100vh'
     }
   },
   props: {

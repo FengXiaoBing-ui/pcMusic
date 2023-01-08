@@ -14,9 +14,9 @@ export default {
   created() {
     // this.clearCookie()
     window.document.documentElement.setAttribute("data-theme", 'blue');
-    document.cookie = "uin=1583446461;";
-    document.cookie = "qm_keyst=Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw;";
-    document.cookie = "qqmusic_key=Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw;";
+    this.$cookies.set("uin","1583446461");
+    this.$cookies.set("qm_keyst","Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw");
+    this.$cookies.set("qqmusic_key","Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw");
   },
   methods: {
     clearCookie() {

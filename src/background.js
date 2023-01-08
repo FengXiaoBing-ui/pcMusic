@@ -1,22 +1,24 @@
 'use strict'
 
-import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, Tray, screen } from 'electron'
+import { app, protocol, BrowserWindow, Notification, Menu, ipcMain, Tray, screen, nativeImage, session } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
+// import installExtension, { VUEJS3_DEVTOOLS } from 'electron-devtools-installer'
 const path = require('path')
-let tray = null
+let tray = null;
 const isDevelopment = process.env.NODE_ENV !== 'production'
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
 
+let iconPath = path.join(__dirname, `${process.env.WEBPACK_DEV_SERVER_URL ? 'bundled/favicon.ico' : 'favicon.ico'}`)
+
 const menu = Menu.buildFromTemplate([])
 Menu.setApplicationMenu(menu)
 
 // 创建窗口的函数
-let win = null,win2 = null
-async function createSBallWindow () {
+let win = null, win2 = null
+async function createSBallWindow() {
   win2 = new BrowserWindow({
     width: 360, //悬浮窗口的宽度 比实际DIV的宽度要多2px 因为有1px的边框
     height: 160, //悬浮窗口的高度 比实际DIV的高度要多2px 因为有1px的边框
@@ -25,27 +27,25 @@ async function createSBallWindow () {
     resizable: false, //禁止窗口大小缩放
     show: false,  //先不让窗口显示
     transparent: true, //设置透明
-    hasShadow:false, //不显示阴影
+    hasShadow: false, //不显示阴影
     alwaysOnTop: true, //窗口是否总是显示在其他窗口之前\
     // backgroundColor: rgba(255,255,255,0),
     webPreferences: {
       nodeIntegration: true,    // 是否集成 Nodejs
-        enableRemoteModule: true,
-        contextIsolation: false,
-        // 关闭同源策略 解决跨域
-        webSecurity: false,
-      // preload: path.join(__dirname, 'preload.js'),
+      enableRemoteModule: true,
+      webSecurity: false,
+      contextIsolation: false
     }
   })
   //通过获取用户屏幕的宽高来设置悬浮球的初始位置
   const { left, top } = { left: screen.getPrimaryDisplay().workAreaSize.width - 400, top: screen.getPrimaryDisplay().workAreaSize.height - 200 }
   win2.setPosition(left, top) //设置悬浮球位置
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    await win2.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}ball`)
-  }else{
-    console.log('???');
+    win2.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/ball`)
+  } else {
+    win2.loadURL(`file://${__dirname}/index.html/#/ball`)
   }
-  ipcMain.on('close-suspension',() => {
+  ipcMain.on('close-suspension', () => {
     win2.hide();
     win.show();
   })
@@ -53,26 +53,25 @@ async function createSBallWindow () {
 
 async function createWindow() {
   // Create the browser window.
-   win = new BrowserWindow({
+  win = new BrowserWindow({
     frame: false,
     width: 1200,
     height: 800,
     minWidth: 1100,
     minHeight: 700,
-    icon: path.join(__dirname, 'favicon.ico'),
+    icon: nativeImage.createFromPath(iconPath),
     webPreferences: {
-
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       // nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       nodeIntegration: true,
+      webSecurity: false,
       devTools: true,//隐藏调试工具
+      preload: path.join(__dirname, 'preload.js'),
     }
   })
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+  function isDevelopmentShow() {
     createSBallWindow()
     ipcMain.on('show', () => {
       win.restore()
@@ -87,12 +86,12 @@ async function createWindow() {
       win.hide();    // 隐藏主程序窗口
       // app.exit()
     })
-    ipcMain.on('ball',function(){
+    ipcMain.on('ball', function () {
       win2.show();
       win.hide();
     })
     // 新建托盘
-    tray = new Tray(path.join(__dirname, 'favicon.ico'));
+    tray = new Tray(nativeImage.createFromPath(iconPath));
 
     // 自定义托盘图标的内容菜单
     const contextMenu = Menu.buildFromTemplate([
@@ -117,10 +116,24 @@ async function createWindow() {
       win.show();
     })
     if (!process.env.IS_TEST) win.webContents.openDevTools()
+  }
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    // Load the url of the dev server if in development mode
+    await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+    isDevelopmentShow()
+    const cookie = { url: 'http://www.github.com', name: 'dummy_name', value: 'dummy' }
+    session.defaultSession.cookies.set(cookie)
+      .then(() => {
+        // success
+      }, (error) => {
+        console.error(error)
+      })
   } else {
     createProtocol('app')
+    isDevelopmentShow()
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+
   }
 }
 

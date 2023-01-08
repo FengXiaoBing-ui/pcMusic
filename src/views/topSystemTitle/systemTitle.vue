@@ -4,27 +4,48 @@
     <div class="midBox">
       <div class="searchBox">
         <i class="icon iconfont icon-search searchIcon"></i>
-        <input @focus="focus" @blur="blur" class="btn input" type="text" placeholder="搜索"
-          placeholderClass="placeholder text-sm" />
-        <div class="" :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"></div>
+        <input
+          @focus="focus"
+          @blur="blur"
+          @keydown.enter="search"
+          v-model="keyWord"
+          class="btn input"
+          type="text"
+          placeholder="搜索"
+          placeholderClass="placeholder text-sm"
+        />
+        <div class="padding-sm text-black" :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'">
+          <p @click.stop="jumpSearchResult(item.name,item.singer)" class="text-cut" v-for="item in searchResultInfo.song.itemlist" :key="item.id">{{ item.name }} - {{ item.singer }}</p>
+        </div>
       </div>
     </div>
     <div class="rightBox flex align-center">
       <view @click="login" class="btn">
         <img v-if="userInfo.headpic" class="userImg" :src="userInfo.headpic" />
-        <i v-else style="font-size: 26px" class="icon iconfont icon-user"></i>
-      </view><!-- 用户头像 -->
+        <i
+          v-else
+          style="font-size: 26px"
+          class="icon iconfont icon-user"
+        ></i> </view
+      ><!-- 用户头像 -->
       <view class="btn flex align-end">
         <p>{{ userInfo.nick }}</p>
-        <i style="font-size: 10px; margin-left: 4px" class="icon iconfont icon-arrow-down-filling"></i>
-      </view><!-- 登录 -->
-      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view><!-- vip -->
-      <view class="btn"><i class="icon iconfont icon-down1"></i></view><!-- 下拉框 -->
-      <view class="btn" @click="$router.push('/home/theme')"><i class="icon iconfont icon-skin"></i></view><!-- 皮肤 -->
+        <i
+          style="font-size: 10px; margin-left: 4px"
+          class="icon iconfont icon-arrow-down-filling"
+        ></i> </view
+      ><!-- 登录 -->
+      <view class="btn"><i class="icon iconfont icon-yooxi"></i></view
+      ><!-- vip -->
+      <view class="btn"><i class="icon iconfont icon-down1"></i></view
+      ><!-- 下拉框 -->
+      <view class="btn" @click="$router.push('/home/theme')"
+        ><i class="icon iconfont icon-skin"></i></view
+      ><!-- 皮肤 -->
       <view @click="mainMenu" class="btn">
         <mainMenu :key="mainMenuShow" :mainMenuShow="mainMenuShow" />
-        <i class="icon iconfont icon-menu"></i>
-      </view><!-- 主菜单 -->
+        <i class="icon iconfont icon-menu"></i> </view
+      ><!-- 主菜单 -->
       <view class="border"></view>
       <div class="btn" @click="ball">
         <i style="font-size: 20px" class="icon iconfont icon-minimize"></i>
@@ -33,7 +54,10 @@
         <i class="icon iconfont icon-2zuixiaohua-1"></i>
       </div>
       <div class="btn" @click="max">
-        <i class="icon iconfont" :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"></i>
+        <i
+          class="icon iconfont"
+          :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"
+        ></i>
       </div>
       <div class="btn" @click="close">
         <i class="icon iconfont icon-close"></i>
@@ -43,8 +67,8 @@
 </template>
 
 <script>
-const { ipcRenderer } = window.require('electron')
 import mainMenu from "/src/views/topSystemTitle/components/mainMenu";
+import { ipcRenderer } from "electron";
 export default {
   name: "systemTitle",
   components: {
@@ -55,31 +79,59 @@ export default {
       restore: false,
       mainMenuShow: false,
       searchResutBoxShow: false,
-      userInfo:{
-        nick:"未登录",
-        headpic:""
-      }
+      keyWord:"",
+      isFocus:false,
+      searchResultInfo:{
+        album:{},
+        mv:{},
+        singer:{},
+        song:{},
+      },
+      userInfo: {
+        nick: "未登录",
+        headpic: "",
+      },
     };
   },
-  created(){
-    this.getUserDetail()
+  watch:{
+    keyWord(){
+      if (this.isFocus&&this.keyWord!=="") {
+        this.searchKeyWord();
+      }else{
+        this.searchResutBoxShow = false;
+      }
+    }
   },
-  mounted() {
+  created() {
+    setTimeout(() => {
+      this.getUserDetail();
+    }, 3000);
   },
+  mounted() {},
   methods: {
-    async getUserDetail(){
+    async getUserDetail() {
       let res = await this.$request.getUserDetail();
-      this.userInfo = res.data.creator
+      console.log(11, res);
+      this.userInfo = res.data.creator;
       console.log(this.userInfo.nick);
     },
+    jumpSearchResult(name,singer){
+      this.searchResutBoxShow = false;
+      this.keyWord = name+' '+singer
+      this.$router.push(`/home/searchResult?key=${this.keyWord}`)
+    },
     login() {
-      window.open('https://graph.qq.com/oauth2.0/authorize?client_id=101558818&response_type=token&scope=all&redirect_uri=http://www.jixueit.cn%2Fqq%2Fcallback', 'oauth2Login_10021' ,'height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes')
+      window.open(
+        "https://graph.qq.com/oauth2.0/authorize?client_id=101558818&response_type=token&scope=all&redirect_uri=http://www.jixueit.cn%2Fqq%2Fcallback",
+        "oauth2Login_10021",
+        "height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes"
+      );
     },
     mainMenu() {
       this.mainMenuShow = !this.mainMenuShow;
     },
     min() {
-      ipcRenderer.send("min-app");
+      ipcRenderer.send("min-app")
     },
     max() {
       this.restore = !this.restore;
@@ -95,13 +147,33 @@ export default {
     ball() {
       ipcRenderer.send("ball");
     },
-    focus() {
-      this.searchResutBoxShow = true;
-      console.log(this.$utils.debounce);
+     focus() {
+      this.isFocus = true
+      if (this.keyWord!=="") {
+        this.searchKeyWord()
+        console.log(this.$utils.debounce);
+      }
     },
     blur() {
-      this.searchResutBoxShow = false;
+      this.isFocus = false
+      setTimeout(() => {
+        this.searchResutBoxShow = false;
+      }, 200);
     },
+    async searchKeyWord(){
+      let searchResutBoxShow = false;
+      let res = await this.$request.getSearch({key:this.keyWord})
+      this.searchResultInfo = {...res.response.data}
+      for (const key in this.searchResultInfo) {
+        if (this.searchResultInfo[key].itemlist.length>0) {
+          searchResutBoxShow = true;
+        }
+      }
+      this.searchResutBoxShow = searchResutBoxShow;
+    },
+    async search(){
+
+    }
   },
 };
 </script>
@@ -180,7 +252,7 @@ export default {
   }
 
   .rightBox {
-    .userImg{
+    .userImg {
       border-radius: 50%;
       width: 30px;
       height: 30px;
@@ -200,8 +272,8 @@ export default {
   }
 }
 
-.btn:hover>i,
-.btn:hover>p {
+.btn:hover > i,
+.btn:hover > p {
   color: white;
 }
 

@@ -1,7 +1,8 @@
 import axios from "axios";
-import qs from "qs";
 
-axios.defaults.baseURL = '/api'
+import qs from "qs";
+const isDev = process.env.NODE_ENV === 'development'
+axios.defaults.baseURL = 'http://127.0.0.1:3200'
 axios.defaults.withCredentials = true
 //post请求头
 //设置超时
@@ -9,6 +10,7 @@ axios.defaults.timeout = 10000;
 
 axios.interceptors.request.use(
     config => {
+        
         return config;
     },
     error => {

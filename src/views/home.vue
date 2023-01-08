@@ -41,7 +41,7 @@ export default {
     ...mapMutations(['setLeftListWidth','setMusicInfoWidth','setIsMusicList']),
     overall(){
       this.setIsMusicList(false)
-    }
+    },
   }
 };
 </script>

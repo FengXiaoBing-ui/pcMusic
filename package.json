@@ -15,8 +15,10 @@
   "dependencies": {
     "axios": "^1.2.2",
     "core-js": "^3.8.3",
+    "escape-html": "^1.0.3",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "vue": "^3.2.13",
+    "vue-cookies": "^1.8.2",
     "vue-router": "^4.1.6",
     "vuex": "^4.1.0"
   },

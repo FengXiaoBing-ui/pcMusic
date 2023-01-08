@@ -1,10 +1,10 @@
 import Vuex from "vuex";
 
-import index from "./musicInfo";
+import musicInfo from "./musicInfo";
 
 const store = new Vuex.Store({
     modules: {
-        index,
+        musicInfo,
     },
     state: {
         leftListWidth:0,//左侧选项列表宽度

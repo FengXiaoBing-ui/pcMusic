@@ -54,9 +54,9 @@
       </div>
       <div class="scroll-y">
         <div @dblclick.stop="playMusic(item,index)" class="padding-sm flex flex-direction listBox"
-             v-for="(item,index) in recommendDaily" :key="item.songid+index" :class="audioObj.songName===item.songname?'activeColor':''">
+             v-for="(item,index) in recommendDaily" :key="item.id+index" :class="audioObj.songName===item.name?'activeColor':''">
           <div>
-            <p class="text-cut">{{ item.songname }}</p>
+            <p class="text-cut">{{ item.name }}</p>
             <p class="text-cut text-gray">{{ item.singer[0].name }}</p>
           </div>
           <div class="flex align-center justify-end text-gray">
@@ -109,21 +109,21 @@ export default {
     }
   },
   computed: {
-    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList'])
+    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList']),
+    ...mapState('musicInfo',['musicList'])
   },
   created() {
     this.getData()
-
   },
   mounted() {
   },
   methods: {
     ...mapMutations(['setIsMusicList']),
     async getData() {
-      let res = await this.$request.getRecommendDaily();
-      this.recommendDaily = res.data.songlist
+      let res = await this.$request.getRecommend();
+      this.recommendDaily = res.response.new_song.data.songlist
       this.playIndex = Math.floor(Math.random()*(this.recommendDaily.length-1))
-      this.getAudioObj(this.recommendDaily[this.playIndex].songname,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].songmid,false)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].mid,this.recommendDaily[this.playIndex].album.mid,false)
     },
     //秒转换为时分秒
     realFormatSecond(second) {
@@ -149,15 +149,19 @@ export default {
     },
      playMusic(info,index) {
       this.playIndex = index
-      this.getAudioObj(info.songname,info.singer[0].name,info.songmid)
+      this.getAudioObj(info.name,info.singer[0].name,info.mid,info.album.mid)
     },
-    async getAudioObj(songName, singerName, id, isPlay = true) {
+    async getAudioObj(songName, singerName, id,albumID, isPlay = true) {
       this.audioObj.songName = songName
       this.audioObj.singerName = singerName
-      let data = await this.$request.getSongUrl({'id':id})
-      let songInfo = await this.$request.getSong({'songmid': id})
-      this.imgUrl = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${songInfo.data.track_info.album.mid}.jpg`
-      this.audioObj.url = data.data[id]
+      if (!id) {
+        console.log(id);
+        alert('暂无歌曲信息')
+        return
+      }
+      let data = await this.$request.getSongUrl({'songmid':id})
+      this.imgUrl = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumID}.jpg`
+      this.audioObj.url = data.data.playUrl[id].url
       this.isAutoPlay = isPlay
     },
     play() {
@@ -173,14 +177,14 @@ export default {
       if (this.playIndex<0){
         this.playIndex = this.recommendDaily.length-1
       }
-      this.getAudioObj(this.recommendDaily[this.playIndex].songname,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].songmid)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].mid,this.recommendDaily[this.playIndex].album.mid)
     },
     nextPlay(){
       this.playIndex++;
       if (this.playIndex>this.recommendDaily.length-1){
         this.playIndex = 0
       }
-      this.getAudioObj(this.recommendDaily[this.playIndex].songname,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].songmid)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].mid,this.recommendDaily[this.playIndex].album.mid)
     },
     clickSlider(e) {
       this.touchesX = e.pageX - this.leftListWidth;

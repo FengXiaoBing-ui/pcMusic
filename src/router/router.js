@@ -1,65 +1,72 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory, createWebHashHistory } from 'vue-router'
+
 
 const router = createRouter({
-    history: createWebHistory("/"),
+    history: process.env.IS_ELECTRON ? createWebHashHistory(process.env.BASE_URL) : createWebHistory(process.env.BASE_URL),
     routes: [
         {
             path: '/',
-            redirect:'/home',
-            name:"/",
-            meta:{
-                keepAlive: true //此页面需要缓存
-            }
+            redirect: '/home',
+            name: "/"
         },
         {
             path: '/home',
             component: () => import('/src/views/home.vue'),
-            redirect:"/home/recommend",
-            name:"home",
-            children:[
+            redirect: "/home/recommend",
+            name: "home",
+            children: [
                 {
-                    path:"/home/recommend",
-                    name:"homeRecommend",
+                    path: "/home/recommend",
+                    name: "homeRecommend",
                     component: () => import('/src/views/midContent/recommend.vue'),
-                    meta:{
+                    meta: {
                         keepAlive: true //此页面需要缓存
                     }
                 },
                 {
                     path: '/home/musicVideo',
-                    name:"homeMusicVideo",
+                    name: "homeMusicVideo",
                     component: () => import('/src/views/midContent/musicVideo.vue'),
-                    meta:{
+                    meta: {
                         keepAlive: true //此页面需要缓存
                     }
                 },
                 {
                     path: '/home/musicHome',
-                    name:"homeMusicHome",
+                    name: "homeMusicHome",
                     component: () => import('/src/views/midContent/musicHome.vue'),
-                    meta:{
+                    meta: {
                         keepAlive: true //此页面需要缓存
                     }
                 },
                 {
                     path: '/home/theme',
-                    name:"homeTheme",
+                    name: "homeTheme",
                     component: () => import('/src/views/midContent/theme.vue'),
-                    meta:{
+                    meta: {
                         keepAlive: true //此页面需要缓存
                     }
+                },
+                {
+                    path: '/home/searchResult',
+                    name: "homeSearchResult",
+                    component: () => import('/src/views/midContent/searchResult.vue')
                 }
-            ],
-            meta:{
-                keepAlive: true //此页面需要缓存
-            }
+            ]
         },
         {
             path: '/ball',
-            name:"ball",
+            name: "ball",
             component: () => import('/src/views/ball.vue')
-        }
+        },
+        {
+            path: "/:pathMatch(.*)*",
+            name: "notFound",
+            component: () => import('/src/views/notFound.vue'),  // 引入 组件
+        },
+
     ]
 })
+
 
 export default router

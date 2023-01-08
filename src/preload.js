@@ -1,1 +1,3 @@
-window.ipcRenderer = require('electron').ipcRenderer
+import {  contextBridge, ipcRenderer,session } from 'electron'
+window.ipcRenderer = ipcRenderer
+window.session = session
