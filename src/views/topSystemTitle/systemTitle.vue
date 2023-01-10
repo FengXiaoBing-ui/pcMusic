@@ -14,8 +14,23 @@
           placeholder="搜索"
           placeholderClass="placeholder text-sm"
         />
-        <div class="padding-sm text-black" :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'">
-          <p @click.stop="jumpSearchResult(item.name,item.singer)" class="text-cut" v-for="item in searchResultInfo.song.itemlist" :key="item.id">{{ item.name }} - {{ item.singer }}</p>
+        <div class="padding-tb-sm text-black" :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'">
+          <div class="padding-lr-sm" style="max-height: 300px;overflow-y: auto;">
+            <div class="margin-tb-xs" v-for="item in searchHotList" :key="item.score">
+              <div class="flex align-center">
+                <p>{{ item.searchWord }}</p>
+                <span class="text-gray margin-lr-xs">{{ item.score }}</span>
+                <img height="18" v-if="item.iconUrl" :src="item.iconUrl" alt="">
+              </div>
+              <p v-if="item.content" class="text-gray">{{ item.content }}</p>
+            </div>
+            <p @click.stop="jumpSearchResult(item.name,item.artists[0].name)" class="text-cut" v-for="item in searchResultInfo.songs" :key="item.id">
+              {{ item.name }}
+              <span v-if="item.transNames" class="text-gray">({{ item.transNames[0] }}) - </span>
+              <span v-for="child in item.artists" :key="child.id">{{ child.name }}</span>
+            </p>
+          </div>
+
         </div>
       </div>
     </div>
@@ -82,11 +97,12 @@ export default {
       keyWord:"",
       isFocus:false,
       searchResultInfo:{
-        album:{},
-        mv:{},
-        singer:{},
-        song:{},
+        albums:[],
+        artists:[],
+        playlists:[],
+        songs:[],
       },
+      searchHotList:[],
       userInfo: {
         nick: "未登录",
         headpic: "",
@@ -147,25 +163,36 @@ export default {
     ball() {
       ipcRenderer.send("ball");
     },
-     focus() {
+    focus() {
       this.isFocus = true
-      if (this.keyWord!=="") {
-        this.searchKeyWord()
-        console.log(this.$utils.debounce);
-      }
-    },
+       if (this.keyWord!=="") {
+         this.searchKeyWord()
+         console.log(this.$utils.debounce);
+      }else {
+         this.getSearchHot()
+       }
+     },
     blur() {
       this.isFocus = false
       setTimeout(() => {
         this.searchResutBoxShow = false;
       }, 200);
     },
+    async getSearchHot(){
+      let res = await this.$NeteaseCloudrequest.getSearchHot()
+      console.log(res.data)
+      this.searchHotList = res.data
+      this.searchResutBoxShow = true;
+
+    },
     async searchKeyWord(){
       let searchResutBoxShow = false;
-      let res = await this.$request.getSearch({key:this.keyWord})
-      this.searchResultInfo = {...res.response.data}
+      let res = await this.$NeteaseCloudrequest.getSearchSuggest({keywords:this.keyWord})
+      let data = await this.$NeteaseCloudrequest.getSearchKey()
+      this.searchResultInfo = {...res.result}
+      console.log(this.searchResultInfo)
       for (const key in this.searchResultInfo) {
-        if (this.searchResultInfo[key].itemlist.length>0) {
+        if (this.searchResultInfo[key].length>0) {
           searchResutBoxShow = true;
         }
       }
@@ -220,7 +247,7 @@ export default {
         opacity: 1;
         top: 40px;
         width: 200%;
-        height: 200px;
+        max-height: 320px;
         background-color: white;
         box-shadow: 1px 1px 10px rgb(77, 77, 77);
         border-radius: 10px;
@@ -282,5 +309,21 @@ export default {
   width: 1px;
   height: 20px;
   border-right: 1px solid rgb(230, 230, 230);
+}
+::-webkit-scrollbar {
+  width: 10px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  width: 10px !important;
+  background-color: transparent;
+  //border: 1px solid #f1f5fa;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 10px !important;
+  background-color: rgba($color: #eeeeee, $alpha: 0.7);
+  border-radius: 5px;
 }
 </style>

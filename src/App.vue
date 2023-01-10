@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex"
 export default {
   name: "App",
   data() {
@@ -13,12 +14,14 @@ export default {
   },
   created() {
     // this.clearCookie()
+    this.setMusicTypeApi(0);
     window.document.documentElement.setAttribute("data-theme", 'blue');
     this.$cookies.set("uin","1583446461");
     this.$cookies.set("qm_keyst","Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw");
     this.$cookies.set("qqmusic_key","Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw");
   },
   methods: {
+    ...mapMutations(['setMusicTypeApi']),
     clearCookie() {
       var cookies = document.cookie.split(";");
 

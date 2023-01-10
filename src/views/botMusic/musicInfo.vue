@@ -57,7 +57,7 @@
              v-for="(item,index) in recommendDaily" :key="item.id+index" :class="audioObj.songName===item.name?'activeColor':''">
           <div>
             <p class="text-cut">{{ item.name }}</p>
-            <p class="text-cut text-gray">{{ item.singer[0].name }}</p>
+            <p class="text-cut text-gray">{{ item.song.artists[0].name }}</p>
           </div>
           <div class="flex align-center justify-end text-gray">
             <i @click.stop="playMusic(item,index)" class="icon iconfont icon-play margin-left-xs"></i>
@@ -120,10 +120,11 @@ export default {
   methods: {
     ...mapMutations(['setIsMusicList']),
     async getData() {
-      let res = await this.$request.getRecommend();
-      this.recommendDaily = res.response.new_song.data.songlist
+      let res = await this.$NeteaseCloudrequest.getNewSong();
+      console.log(res.result)
+      this.recommendDaily = res.result
       this.playIndex = Math.floor(Math.random()*(this.recommendDaily.length-1))
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].mid,this.recommendDaily[this.playIndex].album.mid,false)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl,false)
     },
     //秒转换为时分秒
     realFormatSecond(second) {
@@ -149,9 +150,9 @@ export default {
     },
      playMusic(info,index) {
       this.playIndex = index
-      this.getAudioObj(info.name,info.singer[0].name,info.mid,info.album.mid)
+      this.getAudioObj(info.name,info.song.artists[0].name,info.id,info.picUrl)
     },
-    async getAudioObj(songName, singerName, id,albumID, isPlay = true) {
+    async getAudioObj(songName, singerName, id, imgUrl, isPlay = true) {
       this.audioObj.songName = songName
       this.audioObj.singerName = singerName
       if (!id) {
@@ -159,9 +160,9 @@ export default {
         alert('暂无歌曲信息')
         return
       }
-      let data = await this.$request.getSongUrl({'songmid':id})
-      this.imgUrl = `https://y.gtimg.cn/music/photo_new/T002R300x300M000${albumID}.jpg`
-      this.audioObj.url = data.data.playUrl[id].url
+      let data = await this.$NeteaseCloudrequest.getSongUrl({'id':id,'level':'standard'})
+      this.imgUrl = imgUrl
+      this.audioObj.url = data.data[0].url
       this.isAutoPlay = isPlay
     },
     play() {
@@ -177,14 +178,14 @@ export default {
       if (this.playIndex<0){
         this.playIndex = this.recommendDaily.length-1
       }
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].mid,this.recommendDaily[this.playIndex].album.mid)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl)
     },
     nextPlay(){
       this.playIndex++;
       if (this.playIndex>this.recommendDaily.length-1){
         this.playIndex = 0
       }
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].singer[0].name,this.recommendDaily[this.playIndex].mid,this.recommendDaily[this.playIndex].album.mid)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl)
     },
     clickSlider(e) {
       this.touchesX = e.pageX - this.leftListWidth;

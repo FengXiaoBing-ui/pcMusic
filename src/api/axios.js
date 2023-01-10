@@ -1,6 +1,7 @@
 import axios from "axios";
-
+import { mapState } from "vuex";
 import qs from "qs";
+
 const isDev = process.env.NODE_ENV === 'development'
 axios.defaults.baseURL = 'http://127.0.0.1:3200'
 axios.defaults.withCredentials = true
