@@ -9,28 +9,75 @@
           @blur="blur"
           @keydown.enter="search"
           v-model="keyWord"
-          class="btn input"
+          class="input no-drag"
           type="text"
           placeholder="搜索"
           placeholderClass="placeholder text-sm"
         />
-        <div class="padding-tb-sm text-black" :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'">
-          <div class="padding-lr-sm" style="max-height: 300px;overflow-y: auto;">
-            <div class="margin-tb-xs" v-for="item in searchHotList" :key="item.score">
-              <div class="flex align-center">
-                <p>{{ item.searchWord }}</p>
-                <span class="text-gray margin-lr-xs">{{ item.score }}</span>
-                <img height="18" v-if="item.iconUrl" :src="item.iconUrl" alt="">
+        <div
+          class="padding-tb-sm text-black"
+          :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"
+        >
+          <div style="max-height: 300px; overflow-y: auto;overflow-x: hidden">
+            <h3 v-show="searchResultInfo.songs.length < 1" class="margin-left-xs margin-bottom-xs text-df text-red">热搜榜</h3>
+            <div
+              v-show="searchResultInfo.songs.length < 1"
+              class="padding-lr-xs searchHotList flex align-center"
+              v-for="(item,rankIndex) in searchHotList"
+              :key="item.score"
+              @click.stop="jumpSearchResult(item.searchWord)"
+            >
+              <div class="margin-right" :class="rankIndex<3?'text-red':'text-grey'">{{ rankIndex+1 }}</div>
+              <div class="flex flex-direction justify-center">
+                <div class="flex align-center">
+                  <p>{{ item.searchWord }}</p>
+                  <span class="margin-lr-xs text-grey">{{ item.score }}</span>
+                  <img
+                      height="18"
+                      v-if="item.iconUrl"
+                      :src="item.iconUrl"
+                      alt=""
+                  />
+                </div>
+                <p v-if="item.content" class="text-grey">{{ item.content }}</p>
               </div>
-              <p v-if="item.content" class="text-gray">{{ item.content }}</p>
             </div>
-            <p @click.stop="jumpSearchResult(item.name,item.artists[0].name)" class="text-cut" v-for="item in searchResultInfo.songs" :key="item.id">
-              {{ item.name }}
-              <span v-if="item.transNames" class="text-gray">({{ item.transNames[0] }}) - </span>
-              <span v-for="child in item.artists" :key="child.id">{{ child.name }}</span>
-            </p>
+            <div v-show="searchResultInfo.songs.length > 0" class="flex flex-direction w100">
+              <div v-show="searchResultInfo.songs">
+                <h3 class="padding-left-xs text-sm margin-tb-xs">单曲</h3>
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.songs" :key="item.id">
+                  {{ item.name }}
+                  <span v-if="item.transNames" class="text-gray"
+                  >({{ item.transNames[0] }}) -
+                  </span>
+                  <span v-for="child in item.artists" :key="child.id"> {{
+                      child.name+" "
+                    }} </span>
+                </div>
+              </div>
+              <div v-show="searchResultInfo.artists">
+                <h3 class="padding-left-xs text-sm margin-tb-xs">歌手</h3>
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.artists" :key="item.id">
+                  {{ item.name }}
+                </div>
+              </div>
+              <div v-show="searchResultInfo.albums">
+                <h3 class="padding-left-xs text-sm margin-tb-xs">专辑</h3>
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.albums" :key="item.id">
+                  {{ item.name }}
+                  <span v-for="child in item.artists" :key="child.id"> {{
+                      child.name+" "
+                    }} </span>
+                </div>
+              </div>
+              <div v-show="searchResultInfo.playlists">
+                <h3 class="padding-left-xs text-sm margin-tb-xs">歌单</h3>
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.playlists" :key="item.id">
+                  {{ item.name }}
+                </div>
+              </div>
+            </div>
           </div>
-
         </div>
       </div>
     </div>
@@ -94,31 +141,33 @@ export default {
       restore: false,
       mainMenuShow: false,
       searchResutBoxShow: false,
-      keyWord:"",
-      isFocus:false,
-      searchResultInfo:{
-        albums:[],
-        artists:[],
-        playlists:[],
-        songs:[],
+      keyWord: "",
+      isFocus: false,
+      searchResultInfo: {
+        albums: [],
+        artists: [],
+        playlists: [],
+        songs: [],
       },
-      searchHotList:[],
+      searchHotList: [],
       userInfo: {
         nick: "未登录",
         headpic: "",
       },
+      debounce:""
     };
   },
-  watch:{
-    keyWord(){
-      if (this.isFocus&&this.keyWord!=="") {
-        this.searchKeyWord();
-      }else{
-        this.searchResutBoxShow = false;
+  watch: {
+    keyWord() {
+      if (this.isFocus && this.keyWord !== "") {
+        this.debounce();
+      } else {
+        this.searchResultInfoInit();
       }
-    }
+    },
   },
   created() {
+    this.debounce = this.$utils.debounce(this.searchKeyWord, 1000);
     setTimeout(() => {
       this.getUserDetail();
     }, 3000);
@@ -131,23 +180,24 @@ export default {
       this.userInfo = res.data.creator;
       console.log(this.userInfo.nick);
     },
-    jumpSearchResult(name,singer){
+    jumpSearchResult(name) {
       this.searchResutBoxShow = false;
-      this.keyWord = name+' '+singer
-      this.$router.push(`/home/searchResult?key=${this.keyWord}`)
+      this.keyWord = name;
+      this.$router.push(`/home/searchResult?key=${this.keyWord}`);
     },
     login() {
-      window.open(
-        "https://graph.qq.com/oauth2.0/authorize?client_id=101558818&response_type=token&scope=all&redirect_uri=http://www.jixueit.cn%2Fqq%2Fcallback",
-        "oauth2Login_10021",
-        "height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes"
-      );
+      ipcRenderer.send('login');
+      // window.open(
+      //   "https://graph.qq.com/oauth2.0/authorize?client_id=101558818&response_type=token&scope=all&redirect_uri=http://www.jixueit.cn%2Fqq%2Fcallback",
+      //   "oauth2Login_10021",
+      //   "height=525,width=585, toolbar=no, menubar=no, scrollbars=no, status=no, location=yes, resizable=yes"
+      // );
     },
     mainMenu() {
       this.mainMenuShow = !this.mainMenuShow;
     },
     min() {
-      ipcRenderer.send("min-app")
+      ipcRenderer.send("min-app");
     },
     max() {
       this.restore = !this.restore;
@@ -164,43 +214,51 @@ export default {
       ipcRenderer.send("ball");
     },
     focus() {
-      this.isFocus = true
-       if (this.keyWord!=="") {
-         this.searchKeyWord()
-         console.log(this.$utils.debounce);
-      }else {
-         this.getSearchHot()
-       }
-     },
+      this.isFocus = true;
+      if (this.keyWord !== "") {
+        this.searchKeyWord();
+        console.log(this.$utils.debounce);
+      } else {
+        this.getSearchHot();
+      }
+    },
     blur() {
-      this.isFocus = false
       setTimeout(() => {
+        this.isFocus = false;
+        this.searchResultInfoInit();
         this.searchResutBoxShow = false;
-      }, 200);
+      }, 300);
     },
-    async getSearchHot(){
-      let res = await this.$NeteaseCloudrequest.getSearchHot()
-      console.log(res.data)
-      this.searchHotList = res.data
+    searchResultInfoInit(){
+      this.searchResultInfo = {
+        albums: [],
+        artists: [],
+        playlists: [],
+        songs: [],
+      };
+    },
+    async getSearchHot() {
+      let res = await this.$NeteaseCloudrequest.getSearchHot();
+      this.searchHotList = res.data;
       this.searchResutBoxShow = true;
-
     },
-    async searchKeyWord(){
+    async searchKeyWord() {
       let searchResutBoxShow = false;
-      let res = await this.$NeteaseCloudrequest.getSearchSuggest({keywords:this.keyWord})
-      let data = await this.$NeteaseCloudrequest.getSearchKey()
-      this.searchResultInfo = {...res.result}
-      console.log(this.searchResultInfo)
+      let res = await this.$NeteaseCloudrequest.getSearchSuggest({
+        keywords: this.keyWord,
+      });
+      this.searchResultInfo = { ...res.result };
       for (const key in this.searchResultInfo) {
-        if (this.searchResultInfo[key].length>0) {
+        if (this.searchResultInfo[key].length > 0) {
           searchResutBoxShow = true;
         }
       }
+      if (!this.isFocus){
+        searchResutBoxShow = false
+      }
       this.searchResutBoxShow = searchResutBoxShow;
     },
-    async search(){
-
-    }
+    async search() {},
   },
 };
 </script>
@@ -255,6 +313,7 @@ export default {
       }
 
       .input {
+        width: 20vw;
         outline: none;
         border: none;
         background-color: rgb(214, 214, 214);
@@ -274,6 +333,15 @@ export default {
         transform: translateY(-50%);
         color: gray;
         z-index: 1;
+      }
+
+      .searchHotList{
+        cursor: pointer;
+        min-height: 50px;
+        transition: all 0.2s;
+        &:hover{
+          background-color: rgb(246, 246, 246);
+        }
       }
     }
   }

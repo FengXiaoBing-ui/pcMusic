@@ -32,6 +32,14 @@ function getSearchSuggest(params){
     return axiosApi('/search/suggest',params,'get');
 }
 
+function search(params){
+    return axiosApi('/search',params,'get');
+}
+
+function getSongDetail(params){
+    return axiosApi('/song/detail',params,'get');
+}
+
 function fName(params){
     return axiosApi('',params,'get');
 }
@@ -45,4 +53,6 @@ export default {
     getSearchKey,//获取默认搜索关键字
     getCloudSearch,//获取搜索结果
     getSearchSuggest,//调用此接口 , 传入搜索关键词可获得搜索建议 , 搜索结果同时包含单曲 , 歌手 , 歌单信息
+    search,//搜索
+    getSongDetail,//获取歌曲详情
 }

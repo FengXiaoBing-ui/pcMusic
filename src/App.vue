@@ -82,5 +82,11 @@ div {
   }
 }
 
+/* input 类型为 number 时去掉数字加减上下箭头 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+}
+
 #app {}
 </style>

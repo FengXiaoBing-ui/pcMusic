@@ -24,11 +24,30 @@ function timestampToTime(timestamp, type = 0) {
 }
 
 /**
+ *
+ * @description: 秒转换为时分秒
+ * @param {Number,String} second 秒数
+ */
+function realFormatSecond(second){
+    let secondType = typeof second
+    if (secondType === 'number' || secondType === 'string') {
+        second = parseInt(second)
+        let hours = Math.floor(second / 3600)
+        second = second - hours * 3600
+        let mimute = Math.floor(second / 60)
+        second = second - mimute * 60
+        return (hours<=0?'': (hours+ ':') )+ ('0' + mimute).slice(-2) + ':' + ('0' + second).slice(-2)
+    } else {
+        return '00:00:00'
+    }
+}
+
+/**
  * 
  * @description: 防抖函数
  * @param {Function} func 执行函数
  * @param {Number} wait 时间
- * @param {String} immediate 不知道
+ * @param {Boolean} immediate 不知道
  */
 function debounce(func, wait, immediate) {
     let timeout, args, context, timestamp, result;
@@ -67,5 +86,6 @@ function debounce(func, wait, immediate) {
 
 export default {
     timestampToTime,
-    debounce
+    debounce,
+    realFormatSecond
 }

@@ -9,13 +9,13 @@
     </div>
     <audio ref="audio" @ended="ended" @loadeddata="loadeddata" @timeupdate="update" @canplay="canplay"
            :currentTime="currentTime"
-           :src="audioObj.url"></audio>
+           :src="musicUrl"></audio>
     <div class="musicInfoBox grid col-3 padding-tb-xs padding-lr">
       <div class="flex align-stretch">
-        <img @click="unfoldedDetails" class="musicImg" :src="imgUrl" alt="">
+        <img @click="unfoldedDetails" class="musicImg" :src="musicInfo.picUrl" alt="">
         <div class="w100 flex flex-direction justify-between margin-left-sm">
           <div class="flex align-center text-white margin-right">
-            <p class="text-sm text-cut">{{ audioObj.songName }}-{{ audioObj.singerName }}</p>
+            <p class="text-sm text-cut">{{ musicInfo.songName }}-{{ musicInfo.singerName }}</p>
             <i class="icon iconfont icon-bofangMV margin-left-xs text-sm"></i>
           </div>
           <div class="flex align-center text-white">
@@ -29,12 +29,12 @@
       <div class="flex justify-center align-center text-white">
         <i class="icon iconfont icon-loop text-lg margin-right-xs"></i>
         <i @click="backPlay" class="icon iconfont icon-back text-lg"></i>
-        <i @click="play" class="icon iconfont text-xl margin-lr-xs" :class="audioObj.playState?'icon-pausecircle-fill':'icon-play-filling'"></i>
+        <i @click="play" class="icon iconfont text-xl margin-lr-xs" :class="musicInfo.playState?'icon-pausecircle-fill':'icon-play-filling'"></i>
         <i @click="nextPlay" class="icon iconfont icon-next text-lg"></i>
         <i class="icon iconfont icon-volume margin-left-xs"></i>
       </div>
       <div class="flex justify-end align-center">
-        <p>{{ audioObj.currentTime }}/{{ audioObj.duration }}</p>
+        <p>{{ musicInfo.currentTime }}/{{ musicInfo.duration }}</p>
         <i @click.stop="showMusicList" class="icon margin-left-xs flex align-center">
           <i class="iconfont icon-menu"></i>
           <p class="margin-right">{{ recommendDaily.length }}</p>
@@ -54,7 +54,7 @@
       </div>
       <div class="scroll-y">
         <div @dblclick.stop="playMusic(item,index)" class="padding-sm flex flex-direction listBox"
-             v-for="(item,index) in recommendDaily" :key="item.id+index" :class="audioObj.songName===item.name?'activeColor':''">
+             v-for="(item,index) in recommendDaily" :key="item.id+index" :class="musicInfo.songName===item.name?'activeColor':''">
           <div>
             <p class="text-cut">{{ item.name }}</p>
             <p class="text-cut text-gray">{{ item.song.artists[0].name }}</p>
@@ -97,20 +97,11 @@ export default {
       recommendDaily: [],
       playIndex:0,
       showMusicDetails:'-100vh',//是否显示单曲详情
-      isAutoPlay:false,//是否自动播放
-      audioObj: {
-        playState: false,
-        currentTime: '00:00:00',
-        duration: '00:00:00',
-        url: "",
-        songName: "",
-        singerName: ""
-      },
     }
   },
   computed: {
     ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList']),
-    ...mapState('musicInfo',['musicList'])
+    ...mapState('musicInfo',['musicList','musicUrl','isAutoPlay','musicInfo'])
   },
   created() {
     this.getData()
@@ -119,26 +110,13 @@ export default {
   },
   methods: {
     ...mapMutations(['setIsMusicList']),
+    ...mapMutations('musicInfo',['setMusicUrl','setIsAutoPlay','setMusicInfo']),
     async getData() {
       let res = await this.$NeteaseCloudrequest.getNewSong();
       console.log(res.result)
       this.recommendDaily = res.result
       this.playIndex = Math.floor(Math.random()*(this.recommendDaily.length-1))
       this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl,false)
-    },
-    //秒转换为时分秒
-    realFormatSecond(second) {
-      let secondType = typeof second
-      if (secondType === 'number' || secondType === 'string') {
-        second = parseInt(second)
-        let hours = Math.floor(second / 3600)
-        second = second - hours * 3600
-        let mimute = Math.floor(second / 60)
-        second = second - mimute * 60
-        return hours + ':' + ('0' + mimute).slice(-2) + ':' + ('0' + second).slice(-2)
-      } else {
-        return '0:00:00'
-      }
     },
     //展开歌曲详情
     unfoldedDetails(){
@@ -153,21 +131,20 @@ export default {
       this.getAudioObj(info.name,info.song.artists[0].name,info.id,info.picUrl)
     },
     async getAudioObj(songName, singerName, id, imgUrl, isPlay = true) {
-      this.audioObj.songName = songName
-      this.audioObj.singerName = singerName
+      this.setMusicInfo({songName:songName,singerName:singerName})
       if (!id) {
         console.log(id);
         alert('暂无歌曲信息')
         return
       }
       let data = await this.$NeteaseCloudrequest.getSongUrl({'id':id,'level':'standard'})
-      this.imgUrl = imgUrl
-      this.audioObj.url = data.data[0].url
-      this.isAutoPlay = isPlay
+      this.setMusicUrl(data.data[0].url)
+      this.setIsAutoPlay(isPlay)
+      this.setMusicInfo({picUrl: imgUrl})
     },
     play() {
-      this.audioObj.playState = !this.audioObj.playState
-      if (this.audioObj.playState) {
+      this.setMusicInfo({playState:!this.musicInfo.playState})
+      if (this.musicInfo.playState) {
         this.$refs.audio.play()
       } else {
         this.$refs.audio.pause()
@@ -194,7 +171,7 @@ export default {
       // let move = this.currentTime / ((this.duration) / 100).toFixed(1);
       setTimeout(() => {
         this.$refs.audio.play()
-        this.audioObj.playState = true
+        this.setMusicInfo({playState:true})
       },500)
     },
     mousedown() {
@@ -219,19 +196,18 @@ export default {
       if (move < 0 || move > 100) {
         return
       }
-      this.audioObj.currentTime = this.realFormatSecond(e.target.currentTime)
+      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime)})
       this.progressX = move;
     },
     //当浏览器可以播放音频时
     canplay(e) {
       this.duration = e.target.duration
-      this.audioObj.currentTime = this.realFormatSecond(e.target.currentTime)
-      this.audioObj.duration = this.realFormatSecond(e.target.duration)
+      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime),duration:this.$utils.realFormatSecond(e.target.duration)})
     },
     loadeddata(){
       if (this.isAutoPlay){
         this.$refs.audio.play()
-        this.audioObj.playState = true
+        this.setMusicInfo({playState:true})
       }
       this.progressX = 0
     },

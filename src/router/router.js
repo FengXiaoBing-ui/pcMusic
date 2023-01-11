@@ -60,6 +60,11 @@ const router = createRouter({
             component: () => import('/src/views/ball.vue')
         },
         {
+          path: '/login',
+          name: "login",
+          component: () => import('/src/views/login.vue')
+        },
+        {
             path: "/:pathMatch(.*)*",
             name: "notFound",
             component: () => import('/src/views/notFound.vue'),  // 引入 组件
