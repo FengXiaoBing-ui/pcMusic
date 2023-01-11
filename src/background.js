@@ -20,13 +20,13 @@ Menu.setApplicationMenu(menu)
 let win = null, win2 = null,win3 = null;
 async function createLoginWindow() {
   win3 = new BrowserWindow({
-    width: 400, //悬浮窗口的宽度 比实际DIV的宽度要多2px 因为有1px的边框
-    height: 600, //悬浮窗口的高度 比实际DIV的高度要多2px 因为有1px的边框
+    width: 800, //悬浮窗口的宽度 比实际DIV的宽度要多2px 因为有1px的边框
+    height: 500, //悬浮窗口的高度 比实际DIV的高度要多2px 因为有1px的边框
     type: 'toolbar',  //创建的窗口类型为工具栏窗口
     frame: false,  //要创建无边框窗口
     resizable: false, //禁止窗口大小缩放
     show: false,  //先不让窗口显示
-    transparent: false, //设置透明
+    transparent: true, //设置透明
     hasShadow: true, //不显示阴影
     alwaysOnTop: true, //窗口是否总是显示在其他窗口之前\
     // backgroundColor: rgba(255,255,255,0),
@@ -37,9 +37,6 @@ async function createLoginWindow() {
       contextIsolation: false
     }
   })
-  //通过获取用户屏幕的宽高来设置悬浮球的初始位置
-  const { left, top } = { left: screen.getPrimaryDisplay().workAreaSize.width - ((screen.getPrimaryDisplay().workAreaSize.width/2)+200), top: screen.getPrimaryDisplay().workAreaSize.height - ((screen.getPrimaryDisplay().workAreaSize.height/2)+300) }
-  win3.setPosition(left, top) //设置悬浮球位置
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     win3.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}#/login`)
   } else {
@@ -104,10 +101,10 @@ async function createWindow() {
     }
   })
   function isDevelopmentShow() {
-    createSBallWindow()
     createLoginWindow()
+    createSBallWindow()
     ipcMain.on('login',() => {
-      win3.show()
+      win3.show();
     })
     ipcMain.on('show', () => {
       win.restore()
