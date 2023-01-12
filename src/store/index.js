@@ -11,6 +11,7 @@ const store = new Vuex.Store({
         musicInfoWidth:0,//底部音乐信息宽度
         isMusicList:false,//是否显示右侧播放列表
         musicTypeApi:0,//0:网易云api，1:QQ音乐api,2:其他音乐api
+        userInfo:null,//用户信息
     },
     mutations: {
         setLeftListWidth(state,val){
@@ -30,6 +31,10 @@ const store = new Vuex.Store({
                 axios.defaults.baseURL = 'http://127.0.0.1:3300'
             }
             state.musicTypeApi = val
+        },
+        setUserInfo(state,val){
+            state.userInfo = val
+            console.log(666,state.userInfo)
         },
     },
     actions: {}

@@ -20,7 +20,7 @@ Menu.setApplicationMenu(menu)
 let win = null, win2 = null,win3 = null;
 async function createLoginWindow() {
   win3 = new BrowserWindow({
-    width: 800, //悬浮窗口的宽度 比实际DIV的宽度要多2px 因为有1px的边框
+    width: 700, //悬浮窗口的宽度 比实际DIV的宽度要多2px 因为有1px的边框
     height: 500, //悬浮窗口的高度 比实际DIV的高度要多2px 因为有1px的边框
     type: 'toolbar',  //创建的窗口类型为工具栏窗口
     frame: false,  //要创建无边框窗口
@@ -28,7 +28,7 @@ async function createLoginWindow() {
     show: false,  //先不让窗口显示
     transparent: true, //设置透明
     hasShadow: true, //不显示阴影
-    alwaysOnTop: true, //窗口是否总是显示在其他窗口之前\
+    alwaysOnTop: false, //窗口是否总是显示在其他窗口之前\
     // backgroundColor: rgba(255,255,255,0),
     webPreferences: {
       nodeIntegration: true,    // 是否集成 Nodejs
@@ -103,6 +103,27 @@ async function createWindow() {
   function isDevelopmentShow() {
     createLoginWindow()
     createSBallWindow()
+    ipcMain.on('cookie',(event,cookie) => {
+      // session.defaultSession.cookies.set(cookie)
+      //     .then(() => {
+      //       // success
+      //       console.log('okokok')
+      //     }, (error) => {
+      //       console.log('error',JSON.stringify(error))
+      //     })
+      if (process.env.WEBPACK_DEV_SERVER_URL){
+        win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+      }else {
+        win.loadURL('app://./index.html')
+      }
+    })
+    ipcMain.on('logOut',() => {
+      if (process.env.WEBPACK_DEV_SERVER_URL){
+        win.loadURL(process.env.WEBPACK_DEV_SERVER_URL)
+      }else {
+        win.loadURL('app://./index.html')
+      }
+    })
     ipcMain.on('login',() => {
       win3.show();
     })

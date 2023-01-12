@@ -20,8 +20,15 @@ export default {
     this.$cookies.set("qm_keyst","Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw");
     this.$cookies.set("qqmusic_key","Q_H_L_5nV_XlgRc93ouNr88HwEK8olNtcgInTZf56xQLrKiux-wYfEfraWdGw");
   },
+  async mounted() {
+    let res = await this.$NeteaseCloudrequest.loginStatus()
+    console.log(123,res)
+    if (res.data.profile){
+      this.setUserInfo(res.data.profile)
+    }
+  },
   methods: {
-    ...mapMutations(['setMusicTypeApi']),
+    ...mapMutations(['setMusicTypeApi','setUserInfo']),
     clearCookie() {
       var cookies = document.cookie.split(";");
 

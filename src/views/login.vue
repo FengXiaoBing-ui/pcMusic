@@ -1,15 +1,16 @@
 <template>
   <div
-    class="w100 drag loginBallBox flex align-center"
-    style="height: 100vh; background-color: white"
+    class="w100 drag loginBallBox flex align-center justify-between"
+    style="height: 100vh;"
   >
     <video
       class="video"
       loop
       :autoplay="true"
-      src="../assets/images/Redial.mp4"
+      muted
+      src="https://vdn3.vzuu.com/SD/1731734e-dd8a-11eb-88fa-c61b84202143.mp4?disable_local_cache=1&bu=078babd7&c=avc.0.0&f=mp4&expiration=1673492727&auth_key=1673492727-0-0-a5cb5325e5f481e29d45052ecb32c728&v=tx&pu=078babd7"
     ></video>
-    <div style="width: 50vw">
+    <div style="width: 50vw;height: 100vh;position: relative">
       <div class="close">
         <i
           @click="close"
@@ -24,12 +25,25 @@
           alt=""
         />
         <div class="no-drag margin-top-sm flex flex-direction align-center">
-          <input class="phoneInput" type="number" placeholder="请输入账号" />
-          <input class="passwordInput" type="password" placeholder="请输入密码" />
-          <div class="loginBtn margin-top flex align-center justify-center text-white">login</div>
+          <div class="inputBox">
+            <input class="phoneInput" v-model="phone" type="number" />
+            <div v-show="phone===''" class="inputTips flex align-center">
+              <i class="text-white margin-right-xs icon iconfont icon-link"></i>
+              <span class="text-white">请输入手机号</span>
+            </div>
+          </div>
+          <div class="inputBox margin-top">
+            <input class="passwordInput" v-model="password" type="password" />
+            <div v-show="password===''" class="inputTips flex align-center">
+              <i class="text-white margin-right-xs icon iconfont icon-link"></i>
+              <span class="text-white">请输入密码</span>
+            </div>
+          </div>
+
+          <div @click="login" class="loginBtn margin-top-xl flex align-center justify-center text-white">login</div>
           <div class="w100 margin-top flex justify-between">
-            <span>忘记密码？</span>
-            <span>去注册</span>
+            <span class="text-white">忘记密码？</span>
+            <span class="text-white">去注册</span>
           </div>
         </div>
       </div>
@@ -38,12 +52,15 @@
 </template>
 
 <script>
-import { ipcRenderer } from "electron";
+import {ipcRenderer, remote} from "electron";
 export default {
   name: "myLogin",
   data(){
     return{
-      jiaodu: 0
+      jiaodu: 0,
+      phone:"",
+      password:"",
+      email:""
     }
   },
   created(){
@@ -60,6 +77,20 @@ export default {
     close() {
       ipcRenderer.send("close-suspension");
     },
+    async login(){
+      if (this.phone===""){
+        remote.dialog.showErrorBox("登录失败","请输入手机号")
+        return
+      }
+      let res = await this.$NeteaseCloudrequest.phoneLogin({phone:this.phone,password:this.password})
+      if (res.code==200){
+        const cookie = { url: 'http://localhost', name: 'MUSIC_U', value: res.token }
+        ipcRenderer.send('cookie',cookie)
+        ipcRenderer.send("close-suspension");
+      }else {
+        remote.dialog.showErrorBox("登录失败",res.msg)
+      }
+    }
   },
 };
 </script>
@@ -69,13 +100,14 @@ export default {
   position: relative;
   border-radius: 8px;
   overflow: hidden;
+  background-image: linear-gradient(90deg,rgba(23,28,62,1),rgba(23,28,62,1),rgba(23,28,62,1),rgba(23,28,62,0.1));
   .video {
-    width: 100%;
+    width: 50vw;
+    height: 100vh;
     position: absolute;
-    left: -40%;
+    transform: scale(1.2,1.2);
+    left: 0;
     top: 0;
-    transform-origin: top left;
-    transform: scale(1, 1.25);
   }
   .brcodeImg {
     cursor: pointer;
@@ -88,13 +120,15 @@ export default {
   }
   .close{
     position: absolute;
-    right: 10px;
+    right: -50vw;
     top: 10px;
+    color: white;
   }
   .loginBox{
     position: absolute;
-    right: 8%;
-    top: 100px;
+    right: -50%;
+    transform: translateX(50%);
+    top: 80px;
   }
   .loginBtn{
     cursor: pointer;
@@ -106,21 +140,40 @@ export default {
   .logo {
     width: 100px;
     height: 100px;
+    border-radius: 50%;
   }
   input {
     outline: none;
-  }
-  .phoneInput,.passwordInput{
-    width: 200px;
     border: none;
-    border-bottom: 1px solid rgb(132, 132, 132);
-    padding: 10px 0;
+    overflow: auto;
   }
-  .phoneInput {
-    
-  }
-  .passwordInput {
-
+  .inputBox{
+    width: 200px;
+    position: relative;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    .inputTips{
+      position: absolute;
+      left: 0;
+      top: 10px;
+      transition: all 0.3s;
+      i,span{
+        transition: all 0.3s;
+      }
+    }
+    .phoneInput,.passwordInput{
+      position: relative;
+      z-index: 1;
+      color: white;
+      padding: 10px 0;
+      background-color: rgba(255,255,255,0);
+      &:focus+.inputTips{
+        top: -1px;
+        transform: scale(0.8) translate(-16px,-15px);
+        i,span{
+          color: #dbdbdb;
+        }
+      }
+    }
   }
 }
 </style>

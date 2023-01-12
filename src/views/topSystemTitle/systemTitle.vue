@@ -5,29 +5,30 @@
       <div class="searchBox">
         <i class="icon iconfont icon-search searchIcon"></i>
         <input
-          @focus="focus"
-          @blur="blur"
-          @keydown.enter="search"
-          v-model="keyWord"
-          class="input no-drag"
-          type="text"
-          placeholder="搜索"
-          placeholderClass="placeholder text-sm"
+            @focus="focus"
+            @blur="blur"
+            @keydown.enter="search"
+            v-model="keyWord"
+            class="input no-drag"
+            type="text"
+            placeholder="搜索"
+            placeholderClass="placeholder text-sm"
         />
         <div
-          class="padding-tb-sm text-black"
-          :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"
+            class="padding-tb-sm text-black"
+            :class="searchResutBoxShow ? 'searchResutBoxShow' : 'searchResutBox'"
         >
           <div style="max-height: 300px; overflow-y: auto;overflow-x: hidden">
-            <h3 v-show="searchResultInfo.songs.length < 1" class="margin-left-xs margin-bottom-xs text-df text-red">热搜榜</h3>
+            <h3 v-show="searchResultInfo.songs.length < 1" class="margin-left-xs margin-bottom-xs text-df text-red">
+              热搜榜</h3>
             <div
-              v-show="searchResultInfo.songs.length < 1"
-              class="padding-lr-xs searchHotList flex align-center"
-              v-for="(item,rankIndex) in searchHotList"
-              :key="item.score"
-              @click.stop="jumpSearchResult(item.searchWord)"
+                v-show="searchResultInfo.songs.length < 1"
+                class="padding-lr-xs searchHotList flex align-center"
+                v-for="(item,rankIndex) in searchHotList"
+                :key="item.score"
+                @click.stop="jumpSearchResult(item.searchWord)"
             >
-              <div class="margin-right" :class="rankIndex<3?'text-red':'text-grey'">{{ rankIndex+1 }}</div>
+              <div class="margin-right" :class="rankIndex<3?'text-red':'text-grey'">{{ rankIndex + 1 }}</div>
               <div class="flex flex-direction justify-center">
                 <div class="flex align-center">
                   <p>{{ item.searchWord }}</p>
@@ -45,34 +46,38 @@
             <div v-show="searchResultInfo.songs.length > 0" class="flex flex-direction w100">
               <div v-show="searchResultInfo.songs">
                 <h3 class="padding-left-xs text-sm margin-tb-xs">单曲</h3>
-                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.songs" :key="item.id">
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)"
+                     v-for="item in searchResultInfo.songs" :key="item.id">
                   {{ item.name }}
                   <span v-if="item.transNames" class="text-gray"
                   >({{ item.transNames[0] }}) -
                   </span>
                   <span v-for="child in item.artists" :key="child.id"> {{
-                      child.name+" "
+                      child.name + " "
                     }} </span>
                 </div>
               </div>
               <div v-show="searchResultInfo.artists">
                 <h3 class="padding-left-xs text-sm margin-tb-xs">歌手</h3>
-                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.artists" :key="item.id">
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)"
+                     v-for="item in searchResultInfo.artists" :key="item.id">
                   {{ item.name }}
                 </div>
               </div>
               <div v-show="searchResultInfo.albums">
                 <h3 class="padding-left-xs text-sm margin-tb-xs">专辑</h3>
-                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.albums" :key="item.id">
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)"
+                     v-for="item in searchResultInfo.albums" :key="item.id">
                   {{ item.name }}
                   <span v-for="child in item.artists" :key="child.id"> {{
-                      child.name+" "
+                      child.name + " "
                     }} </span>
                 </div>
               </div>
               <div v-show="searchResultInfo.playlists">
                 <h3 class="padding-left-xs text-sm margin-tb-xs">歌单</h3>
-                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)" v-for="item in searchResultInfo.playlists" :key="item.id">
+                <div class="padding-left-sm padding-tb-xs text-cut hover-grey" @click.stop="jumpSearchResult(item.name)"
+                     v-for="item in searchResultInfo.playlists" :key="item.id">
                   {{ item.name }}
                 </div>
               </div>
@@ -83,30 +88,29 @@
     </div>
     <div class="rightBox flex align-center">
       <view @click="login" class="btn">
-        <img v-if="userInfo.headpic" class="userImg" :src="userInfo.headpic" />
-        <i
-          v-else
-          style="font-size: 26px"
-          class="icon iconfont icon-user"
-        ></i> </view
-      ><!-- 用户头像 -->
+        <img v-if="getUserInfo" class="userImg" :src="getUserInfo?.avatarUrl"/>
+        <i v-else style="font-size: 26px" class="icon iconfont icon-user"></i>
+      </view>
+      <!-- 用户头像 -->
       <view class="btn flex align-end">
-        <p>{{ userInfo.nick }}</p>
-        <i
-          style="font-size: 10px; margin-left: 4px"
-          class="icon iconfont icon-arrow-down-filling"
-        ></i> </view
+        <p v-if="getUserInfo">{{ getUserInfo?.nickname }}</p>
+        <p v-else>未登录</p>
+        <!--        <i-->
+        <!--          style="font-size: 10px; margin-left: 4px"-->
+        <!--          class="icon iconfont icon-arrow-down-filling"-->
+        <!--        ></i> -->
+      </view
       ><!-- 登录 -->
       <view class="btn"><i class="icon iconfont icon-yooxi"></i></view
       ><!-- vip -->
       <view class="btn"><i class="icon iconfont icon-down1"></i></view
       ><!-- 下拉框 -->
       <view class="btn" @click="$router.push('/home/theme')"
-        ><i class="icon iconfont icon-skin"></i></view
+      ><i class="icon iconfont icon-skin"></i></view
       ><!-- 皮肤 -->
       <view @click="mainMenu" class="btn">
-        <mainMenu :key="mainMenuShow" :mainMenuShow="mainMenuShow" />
-        <i class="icon iconfont icon-menu"></i> </view
+        <mainMenu :key="mainMenuShow" :mainMenuShow="mainMenuShow"/>
+        <i class="icon iconfont icon-menu"></i></view
       ><!-- 主菜单 -->
       <view class="border"></view>
       <div class="btn" @click="ball">
@@ -117,8 +121,8 @@
       </div>
       <div class="btn" @click="max">
         <i
-          class="icon iconfont"
-          :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"
+            class="icon iconfont"
+            :class="restore ? 'icon-restore' : 'icon-3zuidahua-1'"
         ></i>
       </div>
       <div class="btn" @click="close">
@@ -130,7 +134,9 @@
 
 <script>
 import mainMenu from "/src/views/topSystemTitle/components/mainMenu";
-import { ipcRenderer } from "electron";
+import {mapState} from "vuex"
+import {ipcRenderer} from "electron";
+
 export default {
   name: "systemTitle",
   components: {
@@ -150,11 +156,11 @@ export default {
         songs: [],
       },
       searchHotList: [],
-      userInfo: {
+      getUserInfo: {
         nick: "未登录",
         headpic: "",
       },
-      debounce:""
+      debounce: ""
     };
   },
   watch: {
@@ -166,19 +172,20 @@ export default {
       }
     },
   },
+  computed: {
+    ...mapState(['userInfo'])
+  },
   created() {
     this.debounce = this.$utils.debounce(this.searchKeyWord, 1000);
     setTimeout(() => {
       this.getUserDetail();
     }, 3000);
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     async getUserDetail() {
-      let res = await this.$request.getUserDetail();
-      console.log(11, res);
-      this.userInfo = res.data.creator;
-      console.log(this.userInfo.nick);
+      this.getUserInfo = this.userInfo;
     },
     jumpSearchResult(name) {
       this.searchResutBoxShow = false;
@@ -186,6 +193,10 @@ export default {
       this.$router.push(`/home/searchResult?key=${this.keyWord}`);
     },
     login() {
+      if (this.getUserInfo) {
+        alert("打开用户详情")
+        return
+      }
       ipcRenderer.send('login');
       // window.open(
       //   "https://graph.qq.com/oauth2.0/authorize?client_id=101558818&response_type=token&scope=all&redirect_uri=http://www.jixueit.cn%2Fqq%2Fcallback",
@@ -229,7 +240,7 @@ export default {
         this.searchResutBoxShow = false;
       }, 300);
     },
-    searchResultInfoInit(){
+    searchResultInfoInit() {
       this.searchResultInfo = {
         albums: [],
         artists: [],
@@ -247,18 +258,19 @@ export default {
       let res = await this.$NeteaseCloudrequest.getSearchSuggest({
         keywords: this.keyWord,
       });
-      this.searchResultInfo = { ...res.result };
+      this.searchResultInfo = {...res.result};
       for (const key in this.searchResultInfo) {
         if (this.searchResultInfo[key].length > 0) {
           searchResutBoxShow = true;
         }
       }
-      if (!this.isFocus){
+      if (!this.isFocus) {
         searchResutBoxShow = false
       }
       this.searchResutBoxShow = searchResutBoxShow;
     },
-    async search() {},
+    async search() {
+    },
   },
 };
 </script>
@@ -272,12 +284,13 @@ export default {
   padding: 0 10px;
   @include font_color("systemTitlefont_color");
 }
+
 .titleBar {
   .leftBox {
     color: white;
     font-style: oblique;
     font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-      "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   }
 
   .midBox {
@@ -335,11 +348,12 @@ export default {
         z-index: 1;
       }
 
-      .searchHotList{
+      .searchHotList {
         cursor: pointer;
         min-height: 50px;
         transition: all 0.2s;
-        &:hover{
+
+        &:hover {
           background-color: rgb(246, 246, 246);
         }
       }
@@ -378,6 +392,7 @@ export default {
   height: 20px;
   border-right: 1px solid rgb(230, 230, 230);
 }
+
 ::-webkit-scrollbar {
   width: 10px;
   background-color: transparent;

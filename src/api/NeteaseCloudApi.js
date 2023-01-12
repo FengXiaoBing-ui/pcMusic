@@ -40,6 +40,22 @@ function getSongDetail(params){
     return axiosApi('/song/detail',params,'get');
 }
 
+function phoneLogin(params){
+    return axiosApi('/login/cellphone',params,'get');
+}
+
+function emailLogin(params){
+    return axiosApi('/login',params,'get');
+}
+
+function loginStatus(params){
+    return axiosApi('/login/status',params,'get');
+}
+
+function logOut(params){
+    return axiosApi('/logout',params,'get');
+}
+
 function fName(params){
     return axiosApi('',params,'get');
 }
@@ -55,4 +71,8 @@ export default {
     getSearchSuggest,//调用此接口 , 传入搜索关键词可获得搜索建议 , 搜索结果同时包含单曲 , 歌手 , 歌单信息
     search,//搜索
     getSongDetail,//获取歌曲详情
+    phoneLogin,//手机号登录
+    emailLogin,//邮箱登录
+    loginStatus,//登录状态
+    logOut,//推出登录
 }

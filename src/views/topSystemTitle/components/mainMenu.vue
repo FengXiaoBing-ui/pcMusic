@@ -1,11 +1,12 @@
 <template>
     <div class="mainMenu" :class="mainMenuShow ? 'mainMenuShow' : ''">
-        <div style="padding: 5px 0;" class="flex align-center justify-center" v-for="item in 6" :key="item">{{ item }}
+        <div style="padding: 5px 0;" @click="clickFun(item.type)" class="flex align-center justify-center" v-for="(item,index) in funList" :key="index">{{ item.name }}
         </div>
     </div>
 </template>
   
 <script>
+import { ipcRenderer } from 'electron'
 export default {
     name: "mainMenu",
     props: {
@@ -14,7 +15,25 @@ export default {
             default: false
         }
     },
-    methods: {},
+  data(){
+      return{
+        funList:[
+          {
+            name:"退出登录",
+            icon:"icon-close",
+            type:"logOut"
+          }
+        ]
+      }
+  },
+    methods: {
+      async clickFun(type){
+        if (type==='logOut'){
+          let state = await this.$NeteaseCloudrequest.logOut()
+          if(state.code==200) ipcRenderer.send('logOut')
+        }
+      }
+    },
 };
 </script>
   
