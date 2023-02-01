@@ -56,6 +56,14 @@ function logOut(params){
     return axiosApi('/logout',params,'get');
 }
 
+function getLyric(params){
+    return axiosApi('/lyric',params,'get');
+}
+
+function getSongSheetDetails(params){
+    return axiosApi('/playlist/detail',params,'get');
+}
+
 function fName(params){
     return axiosApi('',params,'get');
 }
@@ -75,4 +83,6 @@ export default {
     emailLogin,//邮箱登录
     loginStatus,//登录状态
     logOut,//推出登录
+    getLyric,//获取歌词
+    getSongSheetDetails,//获取歌单详情
 }

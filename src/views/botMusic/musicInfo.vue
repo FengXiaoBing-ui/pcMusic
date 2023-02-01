@@ -74,7 +74,7 @@
         </i>
       </div>
     </div>
-    <musicDetails :showMusicDetails="showMusicDetails"></musicDetails>
+    <musicDetails></musicDetails>
   </div>
 </template>
 
@@ -95,12 +95,11 @@ export default {
       currentTime: 0,
       duration: 0,
       recommendDaily: [],
-      playIndex:0,
-      showMusicDetails:'-100vh',//是否显示单曲详情
+      playIndex:0
     }
   },
   computed: {
-    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList']),
+    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList','showMusicDetail']),
     ...mapState('musicInfo',['musicList','musicUrl','isAutoPlay','musicInfo'])
   },
   created() {
@@ -109,7 +108,7 @@ export default {
   mounted() {
   },
   methods: {
-    ...mapMutations(['setIsMusicList']),
+    ...mapMutations(['setIsMusicList','setShowMusicDetail']),
     ...mapMutations('musicInfo',['setMusicUrl','setIsAutoPlay','setMusicInfo']),
     async getData() {
       let res = await this.$NeteaseCloudrequest.getNewSong();
@@ -120,8 +119,7 @@ export default {
     },
     //展开歌曲详情
     unfoldedDetails(){
-      this.showMusicDetails = '0vh'
-      console.log(this.showMusicDetails)
+      this.setShowMusicDetail('0')
     },
     showMusicList() {
       this.setIsMusicList(true)
@@ -131,7 +129,7 @@ export default {
       this.getAudioObj(info.name,info.song.artists[0].name,info.id,info.picUrl)
     },
     async getAudioObj(songName, singerName, id, imgUrl, isPlay = true) {
-      this.setMusicInfo({songName:songName,singerName:singerName})
+      this.setMusicInfo({songName:songName,singerName:singerName,singerId:id})
       if (!id) {
         console.log(id);
         alert('暂无歌曲信息')
@@ -196,13 +194,13 @@ export default {
       if (move < 0 || move > 100) {
         return
       }
-      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime)})
+      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime),lyricCurrentTime:e.target.currentTime})
       this.progressX = move;
     },
     //当浏览器可以播放音频时
     canplay(e) {
       this.duration = e.target.duration
-      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime),duration:this.$utils.realFormatSecond(e.target.duration)})
+      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime),duration:this.$utils.realFormatSecond(e.target.duration),lyricCurrentTime:e.target.currentTime})
     },
     loadeddata(){
       if (this.isAutoPlay){

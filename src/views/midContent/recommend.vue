@@ -4,7 +4,7 @@
 
     <modTitle class="margin-tb-sm" title="你好 謨 今日为你推荐" />
     <div class="grid recommend w100" :class="col">
-      <div class="padding-tb-xs padding-right-sm" v-for="(item,index) in recomPlaylist.slice(0,col==='col-5'?10:12)" :key="item.content_id">
+      <div @click="gotoDetails(item.id)" class="padding-tb-xs padding-right-sm" v-for="(item,index) in recomPlaylist.slice(0,col==='col-5'?10:12)" :key="item.content_id">
         <hoverBox isPlayIcon mode="top">
           <img class="img" @error="imgError(index)" :src="item.picUrl" alt="" />
         </hoverBox>
@@ -58,6 +58,9 @@ export default {
     imgError(index){
       this.recommend[index].cover = 'https://img1.baidu.com/it/u=2105206925,2773939527&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=501'
     },
+    gotoDetails(id){
+      this.$router.push('/home/songSheetDetails?id='+id)
+    }
   },
 };
 </script>

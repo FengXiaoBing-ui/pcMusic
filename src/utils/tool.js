@@ -42,6 +42,35 @@ function realFormatSecond(second){
     }
 }
 
+function time_to_sec(time) {
+    if (time !== null) {
+        let s = "";
+        let min = time.split(":")[0];
+        let sec = time.split(":")[1];
+        s = Number(min * 60) + Number(sec);
+        return s;
+    }
+}
+
+/**
+ *
+ * @description: (用于歌词滚动)秒转换为时分秒
+ * @param {Number,String} second 秒数
+ */
+function lyricRealFormatSecond(second){
+    let secondType = typeof second
+    if (secondType === 'number' || secondType === 'string') {
+        second = second.toFixed(2)
+        let hours = Math.floor(second / 3600)
+        second = second - hours * 3600
+        let mimute = Math.floor(second / 60)
+        second = second - mimute * 60
+        return (hours<=0?'': (hours+ ':') )+ ('0' + mimute).slice(-2) + ':' + (second<10.00?('0' + second):second)
+    } else {
+        return '00:00:00'
+    }
+}
+
 /**
  * 
  * @description: 防抖函数
@@ -87,5 +116,7 @@ function debounce(func, wait, immediate) {
 export default {
     timestampToTime,
     debounce,
-    realFormatSecond
+    realFormatSecond,
+    lyricRealFormatSecond,
+    time_to_sec
 }

@@ -12,6 +12,7 @@ const store = new Vuex.Store({
         isMusicList:false,//是否显示右侧播放列表
         musicTypeApi:0,//0:网易云api，1:QQ音乐api,2:其他音乐api
         userInfo:null,//用户信息
+        showMusicDetail:'-100vh',//显示歌曲详情
     },
     mutations: {
         setLeftListWidth(state,val){
@@ -36,6 +37,9 @@ const store = new Vuex.Store({
             state.userInfo = val
             console.log(666,state.userInfo)
         },
+        setShowMusicDetail(state,val){
+            state.showMusicDetail = val
+        }
     },
     actions: {}
 });

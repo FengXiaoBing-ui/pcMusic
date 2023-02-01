@@ -51,6 +51,11 @@ const router = createRouter({
                     path: '/home/searchResult',
                     name: "homeSearchResult",
                     component: () => import('/src/views/midContent/searchResult.vue')
+                },
+                {
+                    path: '/home/songSheetDetails',
+                    name: "songSheetDetails",
+                    component: () => import('/src/views/midContent/songSheetDetails.vue')
                 }
             ]
         },

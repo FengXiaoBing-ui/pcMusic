@@ -7,10 +7,13 @@ export default {
         musicInfo:{
             playState: false,
             currentTime: '00:00:00',
+            lyricCurrentTime:'00:00:00',
             duration: '00:00:00',
             songName: "",
             singerName: "",
-            picUrl:""
+            picUrl:"",
+            singerId:"",
+            lyric:[]
         },//歌曲信息
     },
     mutations: {
