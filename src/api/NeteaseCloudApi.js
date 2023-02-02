@@ -64,6 +64,10 @@ function getSongSheetDetails(params){
     return axiosApi('/playlist/detail',params,'get');
 }
 
+function getTrackAll(params){
+    return axiosApi('/playlist/track/all',params,'get');
+}
+
 function fName(params){
     return axiosApi('',params,'get');
 }
@@ -85,4 +89,5 @@ export default {
     logOut,//推出登录
     getLyric,//获取歌词
     getSongSheetDetails,//获取歌单详情
+    getTrackAll,//获取歌单所有歌曲
 }

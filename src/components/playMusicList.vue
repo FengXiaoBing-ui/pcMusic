@@ -14,9 +14,11 @@
         <i class="icon iconfont icon-download"></i>
       </div>
       <div class="flex-treble padding text-cut">{{ item.name }}</div>
-      <div class="flex-sub padding text-cut">{{ item.artists[0].name }}</div>
-      <div class="flex-twice padding text-cut">{{ item.album.name }}</div>
-      <div class="padding">{{ $utils.realFormatSecond(item.duration/1000) }}</div>
+      <div class="flex-sub padding text-cut">
+        <span v-for="(child,childIndex) in item.artists||item.ar" :key="child.id">{{ child.name+((childIndex+1)===(item.artists?.length||item.ar?.length)?'':' / ') }}</span>
+      </div>
+      <div class="flex-twice padding text-cut">{{ item.album?.name||item.al?.name }}</div>
+      <div class="padding">{{ $utils.realFormatSecond((item.duration||item.dt)/1000) }}</div>
     </div>
   </div>
 </template>

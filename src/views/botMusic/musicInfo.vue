@@ -114,6 +114,8 @@ export default {
       let res = await this.$NeteaseCloudrequest.getNewSong();
       console.log(res.result)
       this.recommendDaily = res.result
+
+
       this.playIndex = Math.floor(Math.random()*(this.recommendDaily.length-1))
       this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl,false)
     },
