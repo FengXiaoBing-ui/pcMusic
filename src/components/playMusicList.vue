@@ -43,8 +43,12 @@ export default {
   methods:{
     ...mapMutations('musicInfo',['setMusicUrl','setIsAutoPlay','setMusicInfo']),
     async playMusic(item){
+      let songName = "";
+      (item.artists||item.ar).forEach( (ele,index) => {
+        songName += (ele.name+((item.artists?.length||item.ar?.length)===(index+1)?'':' / '))
+      })
       let data = await this.$NeteaseCloudrequest.getSongDetail({ids:item.id})
-      this.setMusicInfo({songName: item.name,singerName: item.artists[0].name,picUrl: data.songs[0].al.picUrl,singerId:item.id})
+      this.setMusicInfo({songName: item.name,singerName: songName,picUrl: data.songs[0]?.al?.picUrl,singerId:item.id})
       let res = await this.$NeteaseCloudrequest.getSongUrl({id:item.id,level:"standard"})
       if (res.data[0].url){
         this.setMusicUrl(res.data[0].url)

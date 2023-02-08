@@ -10,7 +10,7 @@ const store = new Vuex.Store({
         leftListWidth:0,//左侧选项列表宽度
         musicInfoWidth:0,//底部音乐信息宽度
         isMusicList:false,//是否显示右侧播放列表
-        playList:[],//右侧边栏播放列表
+        recommendDaily:[],//右侧边栏播放列表
         musicTypeApi:0,//0:网易云api，1:QQ音乐api,2:其他音乐api
         userInfo:null,//用户信息
         showMusicDetail:'-100vh',//显示歌曲详情
@@ -42,7 +42,8 @@ const store = new Vuex.Store({
             state.showMusicDetail = val
         },
         setPlayList(state,val){
-            state.playList = val
+            state.recommendDaily = val
+            console.log(999,state.recommendDaily)
         }
     },
     actions: {}

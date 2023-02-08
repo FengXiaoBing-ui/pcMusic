@@ -57,7 +57,7 @@
              v-for="(item,index) in recommendDaily" :key="item.id+index" :class="musicInfo.songName===item.name?'activeColor':''">
           <div>
             <p class="text-cut">{{ item.name }}</p>
-            <p class="text-cut text-gray">{{ item.song.artists[0].name }}</p>
+            <span class="text-cut text-gray" v-for="(child,childIndex) in item.song?.artists||item.ar" :key="child.id">{{ child.name+((childIndex+1)===(item.song?.artists?.length||item.ar?.length)?'':' / ') }}</span>
           </div>
           <div class="flex align-center justify-end text-gray">
             <i @click.stop="playMusic(item,index)" class="icon iconfont icon-play margin-left-xs"></i>
@@ -94,30 +94,28 @@ export default {
       touchesX: 0,
       currentTime: 0,
       duration: 0,
-      recommendDaily: [],
       playIndex:0
     }
   },
   computed: {
-    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList','showMusicDetail']),
+    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList','showMusicDetail','recommendDaily']),
     ...mapState('musicInfo',['musicList','musicUrl','isAutoPlay','musicInfo'])
   },
   created() {
-    this.getData()
+    this.getData();
   },
   mounted() {
   },
   methods: {
-    ...mapMutations(['setIsMusicList','setShowMusicDetail']),
+    ...mapMutations(['setIsMusicList','setShowMusicDetail','setPlayList']),
     ...mapMutations('musicInfo',['setMusicUrl','setIsAutoPlay','setMusicInfo']),
     async getData() {
       let res = await this.$NeteaseCloudrequest.getNewSong();
       console.log(res.result)
-      this.recommendDaily = res.result
-
+      this.setPlayList(res.result)
 
       this.playIndex = Math.floor(Math.random()*(this.recommendDaily.length-1))
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl,false)
+      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song?.artists||this.recommendDaily[this.playIndex].ar,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl||this.recommendDaily[this.playIndex].al?.picUrl,false)
     },
     //展开歌曲详情
     unfoldedDetails(){
@@ -128,10 +126,14 @@ export default {
     },
      playMusic(info,index) {
       this.playIndex = index
-      this.getAudioObj(info.name,info.song.artists[0].name,info.id,info.picUrl)
+      this.getAudioObj(info.name,info.song?.artists||info.ar,info.id,info.picUrl||info.al?.picUrl)
     },
     async getAudioObj(songName, singerName, id, imgUrl, isPlay = true) {
-      this.setMusicInfo({songName:songName,singerName:singerName,singerId:id})
+      let name = ''
+      singerName.forEach((item,index) => {
+        name += (singerName.length===(index+1)?item.name:item.name+' / ')
+      })
+      this.setMusicInfo({songName:songName,singerName:name,singerId:id})
       if (!id) {
         console.log(id);
         alert('暂无歌曲信息')
