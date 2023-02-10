@@ -1,7 +1,7 @@
 <template>
   <div class="musicDetails">
     <i class="icon iconfont icon-down1 no-drag backIcon" @click="hide"></i>
-    <img class="musicImg" :src="musicInfo.picUrl" alt="">
+    <div class="imgBox" :style="'background-image:url('+musicInfo.picUrl+')'"></div>
     <div ref="lyric" class="lyric flex flex-direction align-center">
       <p class="text-white" :class="lyricHandle(index)?'text-red':''" v-for="(item,index) in musicInfo.lyric" :key="item[0]">{{ item[1] }}</p>
     </div>
@@ -86,9 +86,11 @@ export default {
     font-size: 30px;
     z-index: 9;
   }
-  .musicImg{
+  .imgBox{
     width: 100%;
     min-height: 100vh;
+    background-color: rgba(0,0,0,1);
+    box-shadow: 0px 0px 100px #000000 inset;
   }
   .lyric{
     position: absolute;

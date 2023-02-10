@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import {net} from "electron";
 export default {
   name:"musicVideo",
   data(){

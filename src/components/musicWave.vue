@@ -80,11 +80,11 @@ export default {
   width: 100%;
   .waveLi{
     position: relative;
-    width: 4px;
-    border-radius: 2px;
+    width: 0.1%;
+    border-radius: 100px;
     height: var(--height);
-    background-color: #00920d;
-    box-shadow: 0px 0px 4px 2px #00ff21;
+    background-color: rgba(255,255,255,0.2);
+    box-shadow: 0px 0px 3px 2px rgba(255,255,255,0.3);
   }
 }
 </style>
