@@ -29,7 +29,8 @@
       <div class="flex justify-center align-center text-white">
         <i class="icon iconfont icon-loop text-lg margin-right-xs"></i>
         <i @click="backPlay" class="icon iconfont icon-back text-lg"></i>
-        <i @click="play" class="icon iconfont text-xl margin-lr-xs" :class="musicInfo.playState?'icon-pausecircle-fill':'icon-play-filling'"></i>
+        <i @click="play" class="icon iconfont text-xl margin-lr-xs"
+           :class="musicInfo.playState?'icon-pausecircle-fill':'icon-play-filling'"></i>
         <i @click="nextPlay" class="icon iconfont icon-next text-lg"></i>
         <i class="icon iconfont icon-volume margin-left-xs"></i>
       </div>
@@ -54,10 +55,13 @@
       </div>
       <div class="scroll-y">
         <div @dblclick.stop="playMusic(item,index)" class="padding-sm flex flex-direction listBox"
-             v-for="(item,index) in recommendDaily" :key="item.id+index" :class="musicInfo.songName===item.name?'activeColor':''">
+             v-for="(item,index) in recommendDaily" :key="item.id+index"
+             :class="musicInfo.songName===item.name?'activeColor':''">
           <div>
             <p class="text-cut">{{ item.name }}</p>
-            <span class="text-cut text-gray" v-for="(child,childIndex) in item.song?.artists||item.ar" :key="child.id">{{ child.name+((childIndex+1)===(item.song?.artists?.length||item.ar?.length)?'':' / ') }}</span>
+            <span class="text-cut text-gray" v-for="(child,childIndex) in item.song?.artists||item.ar" :key="child.id">{{
+                child.name + ((childIndex + 1) === (item.song?.artists?.length || item.ar?.length) ? '' : ' / ')
+              }}</span>
           </div>
           <div class="flex align-center justify-end text-gray">
             <i @click.stop="playMusic(item,index)" class="icon iconfont icon-play margin-left-xs"></i>
@@ -81,9 +85,10 @@
 <script>
 import {mapState, mapMutations} from "vuex"
 import musicDetails from "@/views/botMusic/components/musicDetails";
+
 export default {
   name: "musicInfo",
-  components:{
+  components: {
     musicDetails
   },
   data() {
@@ -94,12 +99,12 @@ export default {
       touchesX: 0,
       currentTime: 0,
       duration: 0,
-      playIndex:0
+      playIndex: 0
     }
   },
   computed: {
-    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList','showMusicDetail','recommendDaily']),
-    ...mapState('musicInfo',['musicList','musicUrl','isAutoPlay','musicInfo'])
+    ...mapState(['leftListWidth', 'musicInfoWidth', 'isMusicList', 'showMusicDetail', 'recommendDaily']),
+    ...mapState('musicInfo', ['musicList', 'musicUrl', 'isAutoPlay', 'musicInfo'])
   },
   created() {
     this.getData();
@@ -107,64 +112,67 @@ export default {
   mounted() {
   },
   methods: {
-    ...mapMutations(['setIsMusicList','setShowMusicDetail','setPlayList']),
-    ...mapMutations('musicInfo',['setMusicUrl','setIsAutoPlay','setMusicInfo']),
+    ...mapMutations(['setIsMusicList', 'setShowMusicDetail', 'setPlayList']),
+    ...mapMutations('musicInfo', ['setMusicUrl', 'setIsAutoPlay', 'setMusicInfo']),
     async getData() {
       let res = await this.$NeteaseCloudrequest.getNewSong();
       console.log(res.result)
       this.setPlayList(res.result)
 
-      this.playIndex = Math.floor(Math.random()*(this.recommendDaily.length-1))
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song?.artists||this.recommendDaily[this.playIndex].ar,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl||this.recommendDaily[this.playIndex].al?.picUrl,false)
+      this.playIndex = Math.floor(Math.random() * (this.recommendDaily.length - 1))
+      this.getAudioObj(this.recommendDaily[this.playIndex].name, this.recommendDaily[this.playIndex].song?.artists || this.recommendDaily[this.playIndex].ar, this.recommendDaily[this.playIndex].id, this.recommendDaily[this.playIndex].picUrl || this.recommendDaily[this.playIndex].al?.picUrl, false)
     },
     //展开歌曲详情
-    unfoldedDetails(){
+    unfoldedDetails() {
       this.setShowMusicDetail('0')
     },
     showMusicList() {
       this.setIsMusicList(true)
     },
-     playMusic(info,index) {
+    playMusic(info, index) {
       this.playIndex = index
-      this.getAudioObj(info.name,info.song?.artists||info.ar,info.id,info.picUrl||info.al?.picUrl)
+      this.getAudioObj(info.name, info.song?.artists || info.ar, info.id, info.picUrl || info.al?.picUrl)
+      this.setMusicInfo({playState: false})
     },
     async getAudioObj(songName, singerName, id, imgUrl, isPlay = true) {
       let name = ''
-      singerName.forEach((item,index) => {
-        name += (singerName.length===(index+1)?item.name:item.name+' / ')
+      singerName.forEach((item, index) => {
+        name += (singerName.length === (index + 1) ? item.name : item.name + ' / ')
       })
-      this.setMusicInfo({songName:songName,singerName:name,singerId:id})
+      this.setMusicInfo({songName: songName, singerName: name, singerId: id})
       if (!id) {
         console.log(id);
         alert('暂无歌曲信息')
         return
       }
-      let data = await this.$NeteaseCloudrequest.getSongUrl({'id':id,'level':'standard'})
+      let data = await this.$NeteaseCloudrequest.getSongUrl({'id': id, 'level': 'standard'})
       this.setMusicUrl(data.data[0].url)
       this.setIsAutoPlay(isPlay)
       this.setMusicInfo({picUrl: imgUrl})
     },
     play() {
-      this.setMusicInfo({playState:!this.musicInfo.playState})
+      this.setMusicInfo({playState: !this.musicInfo.playState})
       if (this.musicInfo.playState) {
         this.$refs.audio.play()
       } else {
         this.$refs.audio.pause()
       }
     },
-    backPlay(){
+    backPlay() {
       this.playIndex--;
-      if (this.playIndex<0){
-        this.playIndex = this.recommendDaily.length-1
+      if (this.playIndex < 0) {
+        this.playIndex = this.recommendDaily.length - 1
       }
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl)
+      this.setMusicInfo({playState: false})
+      this.getAudioObj(this.recommendDaily[this.playIndex].name, this.recommendDaily[this.playIndex].song?.artists || this.recommendDaily[this.playIndex]?.ar, this.recommendDaily[this.playIndex].id, this.recommendDaily[this.playIndex].picUrl || this.recommendDaily[this.playIndex].al?.picUrl)
     },
-    nextPlay(){
+    nextPlay() {
       this.playIndex++;
-      if (this.playIndex>this.recommendDaily.length-1){
+      if (this.playIndex > this.recommendDaily.length - 1) {
         this.playIndex = 0
       }
-      this.getAudioObj(this.recommendDaily[this.playIndex].name,this.recommendDaily[this.playIndex].song.artists[0].name,this.recommendDaily[this.playIndex].id,this.recommendDaily[this.playIndex].picUrl)
+      this.setMusicInfo({playState: false})
+      this.getAudioObj(this.recommendDaily[this.playIndex].name, this.recommendDaily[this.playIndex].song?.artists || this.recommendDaily[this.playIndex]?.ar, this.recommendDaily[this.playIndex].id, this.recommendDaily[this.playIndex].picUrl || this.recommendDaily[this.playIndex].al?.picUrl)
     },
     clickSlider(e) {
       this.touchesX = e.pageX - this.leftListWidth;
@@ -173,8 +181,8 @@ export default {
       // let move = this.currentTime / ((this.duration) / 100).toFixed(1);
       setTimeout(() => {
         this.$refs.audio.play()
-        this.setMusicInfo({playState:true})
-      },500)
+        this.setMusicInfo({playState: true})
+      }, 500)
     },
     mousedown() {
       removeEventListener('mouseup', this.mouseup, false)
@@ -198,22 +206,29 @@ export default {
       if (move < 0 || move > 100) {
         return
       }
-      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime),lyricCurrentTime:e.target.currentTime})
+      this.setMusicInfo({
+        currentTime: this.$utils.realFormatSecond(e.target.currentTime),
+        lyricCurrentTime: e.target.currentTime
+      })
       this.progressX = move;
     },
     //当浏览器可以播放音频时
     canplay(e) {
       this.duration = e.target.duration
-      this.setMusicInfo({currentTime:this.$utils.realFormatSecond(e.target.currentTime),duration:this.$utils.realFormatSecond(e.target.duration),lyricCurrentTime:e.target.currentTime})
+      this.setMusicInfo({
+        currentTime: this.$utils.realFormatSecond(e.target.currentTime),
+        duration: this.$utils.realFormatSecond(e.target.duration),
+        lyricCurrentTime: e.target.currentTime
+      })
     },
-    loadeddata(){
-      if (this.isAutoPlay){
+    loadeddata() {
+      if (this.isAutoPlay) {
         this.$refs.audio.play()
-        this.setMusicInfo({playState:true})
+        this.setMusicInfo({playState: true})
       }
       this.progressX = 0
     },
-    ended(){
+    ended() {
       this.nextPlay()
     },
   }
@@ -240,14 +255,17 @@ export default {
     .scroll-y {
       overflow-y: auto;
       height: 80vh;
-      .activeColor{
+
+      .activeColor {
         transition: all 0.2s;
         @include background_color("border_color1");
         border-radius: 0 10px 10px 0;
-        p{
+
+        p {
           @include font_color("rightMustList");
         }
       }
+
       .listBox {
         &:hover {
           transition: all 0.2s;
@@ -272,11 +290,13 @@ export default {
     top: 50%;
     transform: translateY(-50%);
     width: 100%;
+
     .musicImg {
       width: 50px;
       height: 50px;
       border-radius: 10px;
-      &:hover{
+
+      &:hover {
         cursor: pointer;
         opacity: 0.8;
       }

@@ -48,11 +48,14 @@ export default {
         songName += (ele.name+((item.artists?.length||item.ar?.length)===(index+1)?'':' / '))
       })
       let data = await this.$NeteaseCloudrequest.getSongDetail({ids:item.id})
-      this.setMusicInfo({songName: item.name,singerName: songName,picUrl: data.songs[0]?.al?.picUrl,singerId:item.id})
+      this.setMusicInfo({songName: item.name,singerName: songName,picUrl: data.songs[0]?.al?.picUrl,singerId:item.id,playState:false})
       let res = await this.$NeteaseCloudrequest.getSongUrl({id:item.id,level:"standard"})
       if (res.data[0].url){
         this.setMusicUrl(res.data[0].url)
         this.setIsAutoPlay(true)
+        setTimeout(() => {
+          this.setMusicInfo({playState:true})
+        },500)
       }else {
         alert('播放失败，没有音源')
       }

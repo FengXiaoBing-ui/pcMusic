@@ -5,27 +5,42 @@
     <div ref="lyric" class="lyric flex flex-direction align-center">
       <p class="text-white" :class="lyricHandle(index)?'text-red':''" v-for="(item,index) in musicInfo.lyric" :key="item[0]">{{ item[1] }}</p>
     </div>
+    <musicWave ref="musicWave" :url="musicUrl" :key="musicUrl"></musicWave>
   </div>
 </template>
 
 <script>
 import { mapState,mapMutations } from 'vuex'
+import musicWave from "@/components/musicWave";
 export default {
   name: "musicDetails",
+  components:{
+    musicWave
+  },
   data() {
     return {
     }
   },
   computed:{
     ...mapState(['showMusicDetail']),
-    ...mapState('musicInfo',['musicInfo']),
+    ...mapState('musicInfo',['musicInfo','musicUrl']),
     singerId() {
       return this.musicInfo.singerId
+    },
+    playState(){
+      return this.musicInfo.playState
     }
   },
   watch:{
     singerId(newValue, oldValue) {
       this.getLyric()
+    },
+    playState(newValue, oldValue){
+      if (newValue){
+        this.$refs.musicWave.play()
+      }else {
+        this.$refs.musicWave.pause()
+      }
     }
   },
   methods: {
