@@ -40,6 +40,7 @@ export default {
   },
   mounted(){
     window.onresize = () => {
+      console.log(888,document.body.clientWidth)
       if (document.body.clientWidth>=1300) {
         this.col = 'col-6'
       }else{

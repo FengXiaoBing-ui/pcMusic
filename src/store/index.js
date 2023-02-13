@@ -8,7 +8,9 @@ const store = new Vuex.Store({
     },
     state: {
         leftListWidth:0,//左侧选项列表宽度
+        leftListWidthOld:0,//左侧选项列表宽度
         musicInfoWidth:0,//底部音乐信息宽度
+        musicInfoWidthOld:0,//旧的底部音乐信息宽度
         isMusicList:false,//是否显示右侧播放列表
         recommendDaily:[],//右侧边栏播放列表
         musicTypeApi:0,//0:网易云api，1:QQ音乐api,2:其他音乐api
@@ -19,8 +21,14 @@ const store = new Vuex.Store({
         setLeftListWidth(state,val){
             state.leftListWidth = val
         },
+        setLeftListWidthOld(state,val){
+            state.leftListWidthOld = val
+        },
         setMusicInfoWidth(state,val){
             state.musicInfoWidth = val
+        },
+        setMusicInfoWidthOld(state,val){
+            state.musicInfoWidthOld = val
         },
         setIsMusicList(state,val){
             state.isMusicList = val
@@ -40,6 +48,13 @@ const store = new Vuex.Store({
         },
         setShowMusicDetail(state,val){
             state.showMusicDetail = val
+            if (val=='0'){
+                state.leftListWidth = 0
+                state.musicInfoWidth = document.body.clientWidth-35
+            }else {
+                state.leftListWidth = state.leftListWidthOld-18
+                state.musicInfoWidth = state.musicInfoWidthOld-35
+            }
         },
         setPlayList(state,val){
             state.recommendDaily = val

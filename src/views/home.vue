@@ -16,7 +16,7 @@ import systemTitle from "/src/views/topSystemTitle/systemTitle";
 import leftList from "/src/views/leftList/leftList";
 import mainContent from "/src/views/midContent/mainContent";
 import musicInfo from "/src/views/botMusic/musicInfo";
-import { mapMutations } from "vuex"
+import { mapMutations,mapState } from "vuex"
 export default {
   name: "homeIndex",
   components: {
@@ -29,16 +29,21 @@ export default {
     return{
     }
   },
+  computed:{
+    ...mapState(['showMusicDetail'])
+  },
   mounted() {
     this.setLeftListWidth(this.$refs.leftList.$el.offsetWidth+18)
     this.setMusicInfoWidth(this.$refs.musicInfo.$el.offsetWidth-35)
     window.onresize = () => {
+      this.setMusicInfoWidthOld(this.$refs.musicInfo.$el.offsetWidth)
+      this.setLeftListWidthOld(this.$refs.leftList.$el.offsetWidth)
       this.setLeftListWidth(this.$refs.leftList.$el.offsetWidth+18)
       this.setMusicInfoWidth(this.$refs.musicInfo.$el.offsetWidth-35)
     }
   },
   methods:{
-    ...mapMutations(['setLeftListWidth','setMusicInfoWidth','setIsMusicList']),
+    ...mapMutations(['setLeftListWidth','setMusicInfoWidth','setIsMusicList','setMusicInfoWidthOld','setLeftListWidthOld']),
     overall(){
       this.setIsMusicList(false)
     },

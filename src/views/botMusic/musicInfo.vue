@@ -1,85 +1,88 @@
 <template>
-  <div class="musicInfo padding-lr-lg">
-    <div @click="clickSlider" class="">
-      <div ref="slider" class="sliderBot">
-        <div class="sliderTop" :style="'width: '+progressX+'%'">
-          <div class="sliderBtn" @mousedown="mousedown"></div>
-        </div>
-      </div>
-    </div>
-    <audio ref="audio" @ended="ended" @loadeddata="loadeddata" @timeupdate="update" @canplay="canplay"
-           :currentTime="currentTime"
-           :src="musicUrl"></audio>
-    <div class="musicInfoBox grid col-3 padding-tb-xs padding-lr">
-      <div class="flex align-stretch">
-        <img @click="unfoldedDetails" class="musicImg" :src="musicInfo.picUrl" alt="">
-        <div class="w100 flex flex-direction justify-between margin-left-sm">
-          <div class="flex align-center text-white margin-right">
-            <p class="text-sm text-cut">{{ musicInfo.songName }}-{{ musicInfo.singerName }}</p>
-            <i class="icon iconfont icon-bofangMV margin-left-xs text-sm"></i>
-          </div>
-          <div class="flex align-center text-white">
-            <i class="icon iconfont icon-like1 text-df margin-right-xs"></i>
-            <i class="icon iconfont icon-download text-df margin-right-xs"></i>
-            <i class="icon iconfont icon-more text-df margin-right-xs"></i>
-            <i class="icon iconfont icon-comment text-df"></i>
+  <div>
+    <div class="musicInfo padding-lr-lg">
+      <div @click="clickSlider" class="">
+        <div ref="slider" class="sliderBot">
+          <div class="sliderTop" :style="'width: '+progressX+'%'">
+            <div class="sliderBtn" @mousedown="mousedown"></div>
           </div>
         </div>
       </div>
-      <div class="flex justify-center align-center text-white">
-        <i class="icon iconfont icon-loop text-lg margin-right-xs"></i>
-        <i @click="backPlay" class="icon iconfont icon-back text-lg"></i>
-        <i @click="play" class="icon iconfont text-xl margin-lr-xs"
-           :class="musicInfo.playState?'icon-pausecircle-fill':'icon-play-filling'"></i>
-        <i @click="nextPlay" class="icon iconfont icon-next text-lg"></i>
-        <i class="icon iconfont icon-volume margin-left-xs"></i>
-      </div>
-      <div class="flex justify-end align-center">
-        <p>{{ musicInfo.currentTime }}/{{ musicInfo.duration }}</p>
-        <i @click.stop="showMusicList" class="icon margin-left-xs flex align-center">
-          <i class="iconfont icon-menu"></i>
-          <p class="margin-right">{{ recommendDaily.length }}</p>
-        </i>
-      </div>
-    </div>
-    <div @click.stop="" class="tabMusicList text-white" :class="isMusicList?'rightShow':'rightHide'">
-      <div class="padding-sm">
-        <p class="text-lg">播放列表</p>
-        <div class="flex align-center justify-between text-gray margin-top-xs">
-          <p>{{ recommendDaily.length }}首歌曲</p>
-          <div class="flex align-center">
-            <i class="icon iconfont icon-icon-piliangcaozuo"></i>
-            <i class="margin-left-xs icon iconfont icon-delete"></i>
+      <audio ref="audio" @ended="ended" @loadeddata="loadeddata" @timeupdate="update" @canplay="canplay"
+             :currentTime="currentTime"
+             :src="musicUrl"></audio>
+      <div class="musicInfoBox grid col-3 padding-tb-xs padding-lr">
+        <div class="flex align-stretch">
+          <img @click="unfoldedDetails" class="musicImg" :src="musicInfo.picUrl" alt="">
+          <div class="w100 flex flex-direction justify-between margin-left-sm">
+            <div class="flex align-center text-white margin-right">
+              <p class="text-sm text-cut">{{ musicInfo.songName }}-{{ musicInfo.singerName }}</p>
+              <i class="icon iconfont icon-bofangMV margin-left-xs text-sm"></i>
+            </div>
+            <div class="flex align-center text-white">
+              <i class="icon iconfont icon-like1 text-df margin-right-xs"></i>
+              <i class="icon iconfont icon-download text-df margin-right-xs"></i>
+              <i class="icon iconfont icon-more text-df margin-right-xs"></i>
+              <i class="icon iconfont icon-comment text-df"></i>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="scroll-y">
-        <div @dblclick.stop="playMusic(item,index)" class="padding-sm flex flex-direction listBox"
-             v-for="(item,index) in recommendDaily" :key="item.id+index"
-             :class="musicInfo.songName===item.name?'activeColor':''">
-          <div>
-            <p class="text-cut">{{ item.name }}</p>
-            <span class="text-cut text-gray" v-for="(child,childIndex) in item.song?.artists||item.ar" :key="child.id">{{
-                child.name + ((childIndex + 1) === (item.song?.artists?.length || item.ar?.length) ? '' : ' / ')
-              }}</span>
-          </div>
-          <div class="flex align-center justify-end text-gray">
-            <i @click.stop="playMusic(item,index)" class="icon iconfont icon-play margin-left-xs"></i>
-            <i class="icon iconfont icon-like1 margin-left-xs"></i>
-            <i class="icon iconfont icon-link margin-left-xs"></i>
-            <i class="icon iconfont icon-more margin-left-xs"></i>
-          </div>
+        <div class="flex justify-center align-center text-white">
+          <i class="icon iconfont icon-loop text-lg margin-right-xs"></i>
+          <i @click="backPlay" class="icon iconfont icon-back text-lg"></i>
+          <i @click="play" class="icon iconfont text-xl margin-lr-xs"
+             :class="musicInfo.playState?'icon-pausecircle-fill':'icon-play-filling'"></i>
+          <i @click="nextPlay" class="icon iconfont icon-next text-lg"></i>
+          <i class="icon iconfont icon-volume margin-left-xs"></i>
+        </div>
+        <div class="flex justify-end align-center">
+          <p>{{ musicInfo.currentTime }}/{{ musicInfo.duration }}</p>
+          <i @click.stop="showMusicList" class="icon margin-left-xs flex align-center">
+            <i class="iconfont icon-menu"></i>
+            <p class="margin-right">{{ recommendDaily.length }}</p>
+          </i>
         </div>
       </div>
-      <div class="padding-sm flex justify-end">
-        <i @click="setIsMusicList(false)" class="icon padding-xs flex align-center">
-          <i class="iconfont icon-shouqi margin-right-xs"></i>
-          <p>收起</p>
-        </i>
+      <div @click.stop="" class="tabMusicList text-white" :class="isMusicList?'rightShow':'rightHide'">
+        <div class="padding-sm">
+          <p class="text-lg">播放列表</p>
+          <div class="flex align-center justify-between text-gray margin-top-xs">
+            <p>{{ recommendDaily.length }}首歌曲</p>
+            <div class="flex align-center">
+              <i class="icon iconfont icon-icon-piliangcaozuo"></i>
+              <i class="margin-left-xs icon iconfont icon-delete"></i>
+            </div>
+          </div>
+        </div>
+        <div class="scroll-y">
+          <div @dblclick.stop="playMusic(item,index)" class="padding-sm flex flex-direction listBox"
+               v-for="(item,index) in recommendDaily" :key="item.id+index"
+               :class="musicInfo.songName===item.name?'activeColor':''">
+            <div>
+              <p class="text-cut">{{ item.name }}</p>
+              <span class="text-cut text-gray" v-for="(child,childIndex) in item.song?.artists||item.ar" :key="child.id">{{
+                  child.name + ((childIndex + 1) === (item.song?.artists?.length || item.ar?.length) ? '' : ' / ')
+                }}</span>
+            </div>
+            <div class="flex align-center justify-end text-gray">
+              <i @click.stop="playMusic(item,index)" class="icon iconfont icon-play margin-left-xs"></i>
+              <i class="icon iconfont icon-like1 margin-left-xs"></i>
+              <i class="icon iconfont icon-link margin-left-xs"></i>
+              <i class="icon iconfont icon-more margin-left-xs"></i>
+            </div>
+          </div>
+        </div>
+        <div class="padding-sm flex justify-end">
+          <i @click="setIsMusicList(false)" class="icon padding-xs flex align-center">
+            <i class="iconfont icon-shouqi margin-right-xs"></i>
+            <p>收起</p>
+          </i>
+        </div>
       </div>
     </div>
     <musicDetails></musicDetails>
   </div>
+
 </template>
 
 <script>
@@ -99,7 +102,8 @@ export default {
       touchesX: 0,
       currentTime: 0,
       duration: 0,
-      playIndex: 0
+      playIndex: 0,
+      vw:"88vw",
     }
   },
   computed: {
@@ -111,8 +115,17 @@ export default {
   },
   mounted() {
   },
+  watch:{
+    showMusicDetail(){
+      if(this.showMusicDetail=='0'){
+        this.vw = "100vw"
+      }else {
+        this.vw = "88vw"
+      }
+    }
+  },
   methods: {
-    ...mapMutations(['setIsMusicList', 'setShowMusicDetail', 'setPlayList']),
+    ...mapMutations(['setIsMusicList', 'setShowMusicDetail', 'setPlayList','setLeftListWidth','setMusicInfoWidth']),
     ...mapMutations('musicInfo', ['setMusicUrl', 'setIsAutoPlay', 'setMusicInfo']),
     async getData() {
       let res = await this.$NeteaseCloudrequest.getNewSong();
@@ -237,11 +250,13 @@ export default {
 
 <style lang="scss" scoped>
 .musicInfo {
-  width: 88vw;
+  width: v-bind(vw);
   height: 10vh;
   position: fixed;
   bottom: 0;
   right: 0;
+  z-index: 9;
+  transition: all 0.3s;
 
   .tabMusicList {
     position: fixed;
